@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,13 +14,19 @@ public class GameController : MonoBehaviour
 
     private Vector3 _ballDirection;
 
-
-
     private Vector3 _mouseWorldPosition;
 
     private Vector2 _mouseDownPosition;
     private Vector2 _mouseUpPosition;
 
+    public float minBallSpeed = 3;
+    public float maxBallSpeed = 10;
+    
+    private DateTime _mouseDownTime;
+    private DateTime _mouseUpTime;
+
+    public float maxSlideTime = 500;
+    
     private void Start()
     {
         
@@ -31,8 +38,6 @@ public class GameController : MonoBehaviour
     }
     void Update()
     {
-
-
         if (Input.GetKeyUp(KeyCode.R))
         {
             Restart();
@@ -40,13 +45,11 @@ public class GameController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            //_mousePressed = false;
 
+            _mouseDownTime = DateTime.Now;
             _mouseDownPosition = Input.mousePosition;
-//            if (_mouseDownPosition.y < Screen.currentResolution.height / 3)
-//            {
-                _mousePressed = true;
-//            }
+            _mousePressed = true;
+
         }
         
         
@@ -62,22 +65,48 @@ public class GameController : MonoBehaviour
 
 
         }
-
+        
         if (Input.GetMouseButtonUp(0))
-        {
+        {                    
+            _mouseUpTime = DateTime.Now;
             _mouseUpPosition = Input.mousePosition;
+            
             if(_mouseUpPosition.y > _mouseDownPosition.y)
             {
-                if (_mousePressed)
-                {
+
                     if (_ballThrown == false)
                     {
                         _ballThrown = true;
-                        // min - 3 max - 9;
-                        ball.strength = Random.Range(3,9);
+
+                        //Screen.height = 100%
+                        //SlideLength = x%
+
+                        float screenPercent = (_mouseUpPosition.y - _mouseDownPosition.y) * 100 / Screen.height;
+                        
+                        // maxBallSpeed = 100%
+                        // x = screenPercent
+
+                        float strength = screenPercent * maxBallSpeed / 100;
+                        
+                        float deltaTime = (float)(_mouseUpTime - _mouseDownTime).TotalSeconds;
+
+                        if (deltaTime > maxSlideTime)
+                        {
+                            strength = minBallSpeed;
+                        }
+                        else
+                        {
+                            float timeEffect =
+                            deltaTime / maxSlideTime;
+
+                            strength /= timeEffect;
+                        }
+                        
+                        strength = Mathf.Clamp(strength, minBallSpeed, maxBallSpeed);
+                        
+                        ball.strength = strength;
                         ball.Throw();
                     }
-                }
 
             }
 
