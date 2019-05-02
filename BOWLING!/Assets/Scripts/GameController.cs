@@ -8,12 +8,14 @@ public class GameController : MonoBehaviour
     public BallBehaviour ball;
 
     public Pins pins;
-    public List<GameObject> HitPins;
+    public List<Pin> HitPins;
     
     private bool _ballThrown;
+    
     private Coroutine _endTurnCorutine;
     private bool _endTurn;
-
+    public GameObject pinsCleaner;
+    
     private Vector3 _ballDirection;
     
     private bool _mousePressed;
@@ -29,19 +31,21 @@ public class GameController : MonoBehaviour
     
     public float maxSlideTime = 500;
 
+    private Animator _animator;
     private void Start()
     {
-        HitPins = new List<GameObject>();
+        HitPins = new List<Pin>();
+        _animator = pinsCleaner.GetComponent<Animator>();
     }
 
     /// <summary>
-    /// Возвращает шар в начальную позицию или перезагружает сцену если шар не был брошен
+    /// Возвращает шар в начальную позицию или возвращает кегли в начальные позиции
     /// </summary>
     public void Restart()
     {
         if (_ballThrown == false)
         {
-            SceneManager.LoadScene("SampleScene");
+            pins.Restart();
         }
         _ballThrown = false;
         ball.ToStart();
@@ -121,16 +125,21 @@ public class GameController : MonoBehaviour
                     }
 
             }
-
             _mousePressed = false;
         }
+
+
+//        if (_endTurn == true)
+//        {
+//            pins.LiftUp = true;
+//        }
     }
 
     /// <summary>
     /// Запускает EndTurn() для сбитой кегли, останавливает предыдущую корутину если она была запущена
     /// </summary>
     /// <param name="pin">Сбитая кегля</param>
-    public void PinHit(GameObject pin)
+    public void PinHit(Pin pin)
     {
 
         if (_endTurnCorutine != null)
@@ -149,7 +158,10 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Debug.Log("END");
+        pins.LiftUp = true;
         _endTurn = true;
+        yield return  new WaitForSeconds(1);
+        _animator.Play("Clean");
     }
     
 }

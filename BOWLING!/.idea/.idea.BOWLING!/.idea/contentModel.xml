@@ -10,8 +10,8 @@
           <e p="BallBehaviour.cs" t="Include" />
           <e p="CameraBehaviour.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
+          <e p="Pin.cs" t="Include" />
           <e p="Pins.cs" t="Include" />
-          <e p="Skittle.cs" t="Include" />
         </e>
         <e p="TextMesh Pro" t="Include">
           <e p="Examples &amp; Extras" t="Include">
