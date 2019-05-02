@@ -33,7 +33,7 @@ RenderSettings:
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
-  m_DefaultReflectionResolution: 512
+  m_DefaultReflectionResolution: 16
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
@@ -57,20 +57,21 @@ LightmapSettings:
     serializedVersion: 10
     m_Resolution: 2
     m_BakeResolution: 40
-    m_AtlasSize: 1024
-    m_AO: 1
+    m_AtlasSize: 32
+    m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
     m_Padding: 2
-    m_LightmapParameters: {fileID: 0}
+    m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000,
+      type: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
     m_FinalGather: 0
     m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 256
-    m_ReflectionCompression: 2
-    m_MixedBakeMode: 2
+    m_ReflectionCompression: 1
+    m_MixedBakeMode: 0
     m_BakeBackend: 0
     m_PVRSampling: 1
     m_PVRDirectSampleCount: 32
@@ -89,7 +90,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -614,6 +615,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ball: {fileID: 1855962197}
   pins: {fileID: 1893329717}
+  HitPins: []
   minBallSpeed: 3
   maxBallSpeed: 9
   maxSlideTime: 0.3
@@ -1426,7 +1428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1021720962
 Light:
   m_ObjectHideFlags: 0
@@ -2740,6 +2742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strength: 6
+  startPosition: {x: 0, y: 0.345, z: -6.265}
 --- !u!135 &1855962198
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2836,6 +2839,61 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3244922305635595342, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922305864525059, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922305910613831, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922305936719876, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922306527131791, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922306538416461, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922306932957374, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922307058088350, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922307278193513, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244922307340469116, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4653992829446819539, guid: 36c4da3bdf4935d469a956bf10d1c9e7,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 503564208}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36c4da3bdf4935d469a956bf10d1c9e7, type: 3}
 --- !u!114 &1893329717 stripped

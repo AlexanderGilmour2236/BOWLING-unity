@@ -8,41 +8,53 @@ public class GameController : MonoBehaviour
     public BallBehaviour ball;
 
     public Pins pins;
-
-    private bool _ballThrown = false;
-    private bool _mousePressed;
+    public List<GameObject> HitPins;
+    
+    private bool _ballThrown;
+    private Coroutine _endTurnCorutine;
+    private bool _endTurn;
 
     private Vector3 _ballDirection;
-
+    
+    private bool _mousePressed;
     private Vector3 _mouseWorldPosition;
-
     private Vector2 _mouseDownPosition;
     private Vector2 _mouseUpPosition;
 
+    private DateTime _mouseDownTime;
+    private DateTime _mouseUpTime;
+    
     public float minBallSpeed = 3;
     public float maxBallSpeed = 10;
     
-    private DateTime _mouseDownTime;
-    private DateTime _mouseUpTime;
-
     public float maxSlideTime = 500;
-    
+
     private void Start()
     {
-        
+        HitPins = new List<GameObject>();
     }
 
+    /// <summary>
+    /// Возвращает шар в начальную позицию или перезагружает сцену если шар не был брошен
+    /// </summary>
     public void Restart()
     {
-        SceneManager.LoadScene("SampleScene");
+        if (_ballThrown == false)
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
+        _ballThrown = false;
+        ball.ToStart();
     }
+
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.R))
         {
             Restart();
         }
-
+        
+        // при нажатии левой кнопки мыши запоминаются координаты и время нажатия
         if (Input.GetMouseButtonDown(0))
         {
 
@@ -52,7 +64,7 @@ public class GameController : MonoBehaviour
 
         }
         
-        
+        // при зажатой левой кнопке миши шар выполняет поворот относительно курсора
         if (Input.GetMouseButton(0))
         {
 
@@ -61,11 +73,9 @@ public class GameController : MonoBehaviour
                 _mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
                 ball.transform.LookAt(new Vector3(_mouseWorldPosition.x, 0, 0));
             }
-
-
-
         }
         
+        // при отжатии левой кнопки мыши высчитывается сила броска и выполняется функция ball.throw()
         if (Input.GetMouseButtonUp(0))
         {                    
             _mouseUpTime = DateTime.Now;
@@ -90,12 +100,14 @@ public class GameController : MonoBehaviour
                         
                         float deltaTime = (float)(_mouseUpTime - _mouseDownTime).TotalSeconds;
 
-                        if (deltaTime > maxSlideTime)
+                        if (deltaTime >= maxSlideTime)
                         {
                             strength = minBallSpeed;
                         }
                         else
                         {
+                            // deltatime от 0 до maxSlideTime-1 делится на максимальное время свайпа для броска
+                            // получая величину от ~0 до 1, на которую делится сила броска
                             float timeEffect =
                             deltaTime / maxSlideTime;
 
@@ -112,25 +124,33 @@ public class GameController : MonoBehaviour
 
             _mousePressed = false;
         }
-
-//        foreach(Skittle s in skittles)
-//        {
-//
-//            if (Mathf.Abs(s.transform.localRotation.z) > 90)
-//            {
-//                
-//                s.gameObject.SetActive(false);
-//
-//            }
-//
-//            if (Mathf.Abs(s.transform.localRotation.x) > 90)
-//            {
-//
-//                s.gameObject.SetActive(false);
-//
-//            }
-//        }
-
     }
+
+    /// <summary>
+    /// Запускает EndTurn() для сбитой кегли, останавливает предыдущую корутину если она была запущена
+    /// </summary>
+    /// <param name="pin">Сбитая кегля</param>
+    public void PinHit(GameObject pin)
+    {
+
+        if (_endTurnCorutine != null)
+        {
+            StopCoroutine(_endTurnCorutine);
+        }
+        _endTurnCorutine = StartCoroutine(EndTurn());
+        
+        HitPins.Add(pin);
+    }
+
+    /// <summary>
+    /// Отсчитывает одну секунду и объявляет об окончании хода 
+    /// </summary>
+    IEnumerator EndTurn()
+    {
+        yield return new WaitForSeconds(1);
+        Debug.Log("END");
+        _endTurn = true;
+    }
+    
 }
 

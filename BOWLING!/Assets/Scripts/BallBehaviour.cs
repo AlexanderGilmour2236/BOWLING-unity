@@ -11,12 +11,25 @@ public class BallBehaviour : MonoBehaviour
     private bool _throw = false;
     
     public float strength = 5;
-    
+    public Vector3 startPosition;
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
+    
+    /// <summary>
+    /// Возвращает шар на начальную позицию
+    /// </summary>
+    public void ToStart()
+    {
+        _throw = false;
+        transform.position = startPosition;
+        _rigidbody.useGravity = false;
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+        
 
+    }
     public void Throw()
     {
         _throw = true;
