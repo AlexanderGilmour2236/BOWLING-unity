@@ -7,6 +7,24 @@ public class Pin : MonoBehaviour
     private Vector3 _startPosition;
     private Vector3 _startRotation;
     private Rigidbody _rigidbody;
+    private bool _collide;
+    /// <summary>
+    /// вкл/выкл коллайдер и гравитацию
+    /// </summary>
+    public bool Collide
+    {
+        get { return _collide; }
+        set
+        {
+            _collide = value;
+            _rigidbody.detectCollisions = value;
+            _rigidbody.useGravity = value;
+        }
+    }
+    
+    /// <summary>
+    /// Сбита ли кегля
+    /// </summary>
     public bool PinHit { get; set; }
     void Start()
     {
@@ -15,6 +33,9 @@ public class Pin : MonoBehaviour
         _startRotation = transform.localEulerAngles;
     }
 
+    /// <summary>
+    /// Возвращает кеглю в начальную позицию
+    /// </summary>
     public void Restart()
     {
         _rigidbody.velocity = Vector3.zero;
@@ -23,4 +44,6 @@ public class Pin : MonoBehaviour
         transform.position = _startPosition;
         transform.localEulerAngles = _startRotation;
     }
+    
+    
 }

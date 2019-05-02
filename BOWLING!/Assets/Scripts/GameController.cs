@@ -31,11 +31,14 @@ public class GameController : MonoBehaviour
     
     public float maxSlideTime = 500;
 
-    private Animator _animator;
+    public CameraBehaviour mainCamera;
+    
+    private Animator _pinsCleanerAnimator;
+    [SerializeField] private AnimationClip _pinsCleanerAnimationClip;
     private void Start()
     {
         HitPins = new List<Pin>();
-        _animator = pinsCleaner.GetComponent<Animator>();
+        _pinsCleanerAnimator = pinsCleaner.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -46,9 +49,11 @@ public class GameController : MonoBehaviour
         if (_ballThrown == false)
         {
             pins.Restart();
+            HitPins.Clear();
         }
         _ballThrown = false;
         ball.ToStart();
+        mainCamera.target = ball.transform;
     }
 
     void Update()
@@ -74,7 +79,7 @@ public class GameController : MonoBehaviour
 
             if (_mousePressed)
             {
-                _mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
+                _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
                 ball.transform.LookAt(new Vector3(_mouseWorldPosition.x, 0, 0));
             }
         }
@@ -127,12 +132,6 @@ public class GameController : MonoBehaviour
             }
             _mousePressed = false;
         }
-
-
-//        if (_endTurn == true)
-//        {
-//            pins.LiftUp = true;
-//        }
     }
 
     /// <summary>
@@ -142,6 +141,8 @@ public class GameController : MonoBehaviour
     public void PinHit(Pin pin)
     {
 
+        mainCamera.target = mainCamera.cameraPoints[0].transform;
+        
         if (_endTurnCorutine != null)
         {
             StopCoroutine(_endTurnCorutine);
@@ -157,11 +158,17 @@ public class GameController : MonoBehaviour
     IEnumerator EndTurn()
     {
         yield return new WaitForSeconds(1);
-        Debug.Log("END");
-        pins.LiftUp = true;
+        pins.LiftUp();
         _endTurn = true;
         yield return  new WaitForSeconds(1);
-        _animator.Play("Clean");
+        _pinsCleanerAnimator.Play("Clean");
+        yield return new WaitForSeconds(_pinsCleanerAnimationClip.length);
+        pins.LiftDown();
+        Restart();
+        yield return  new WaitForSeconds(1);
+        pins.Collide(true);
+        
+        _endTurn = false;
     }
     
 }

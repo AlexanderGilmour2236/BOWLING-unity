@@ -8,11 +8,31 @@ public class Pins : MonoBehaviour
     public GameController gameController;
     private List<Pin> _pins;
     
-    public bool LiftUp;
-    public bool LiftDown;
+    private bool _liftUp;
+    public bool _liftDown;
+    public void LiftUp()
+    {
+        _liftDown = false;
+        _liftUp = true;
+        Collide(false);
+    }
+
+    public void LiftDown()
+    {
+        _liftDown = true;
+        _liftUp = false;
+        //Collide(true);
+    }
+    
+    private Vector3 _liftUpPosition;
+    private Vector3 _liftDownPosition;
     
     void Start()
     {
+        _liftDownPosition = transform.position;
+        _liftUpPosition = _liftDownPosition;
+        _liftUpPosition.y += 0.75f;
+        
         _pins = new List<Pin>();
         foreach (Transform pin in transform)
         {
@@ -34,11 +54,16 @@ public class Pins : MonoBehaviour
             }
         }
 
-        if (LiftUp)
+        if (_liftUp)
         {
-            LiftDown = false;
-            //
+            transform.position = Vector3.Lerp(transform.position,_liftUpPosition,3*Time.deltaTime);
         }
+
+        if (_liftDown)
+        {
+            transform.position = Vector3.Lerp(transform.position,_liftDownPosition,3*Time.deltaTime);
+        }
+        
     }
 
     public void Restart()
@@ -50,5 +75,15 @@ public class Pins : MonoBehaviour
             pin.PinHit = false;
         }
     }
-    
+
+    public void Collide(bool collide)
+    {
+        foreach (Pin pin in _pins)
+        {
+            if (!pin.PinHit)
+            {
+                pin.Collide = collide;
+            }
+        }
+    }
 }
