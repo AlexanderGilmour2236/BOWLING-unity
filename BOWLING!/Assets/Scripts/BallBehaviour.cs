@@ -24,11 +24,10 @@ public class BallBehaviour : MonoBehaviour
     {
         _throw = false;
         transform.position = startPosition;
+        transform.localEulerAngles = Vector3.forward;
         _rigidbody.useGravity = false;
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
-        
-
     }
     public void Throw()
     {
@@ -42,10 +41,7 @@ public class BallBehaviour : MonoBehaviour
             _throw = false;
             _rigidbody.useGravity = true;
             _rigidbody.AddForce(new Vector3(transform.forward.x * strength, 0, transform.forward.z * strength), ForceMode.VelocityChange);
-            
         }
-
     }
-
-    }
+}
 

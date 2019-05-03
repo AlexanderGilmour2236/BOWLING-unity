@@ -17,6 +17,7 @@ public class Pin : MonoBehaviour
         set
         {
             _collide = value;
+            _rigidbody.isKinematic = !value;
             _rigidbody.detectCollisions = value;
             _rigidbody.useGravity = value;
         }

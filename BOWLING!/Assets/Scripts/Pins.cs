@@ -10,18 +10,22 @@ public class Pins : MonoBehaviour
     
     private bool _liftUp;
     public bool _liftDown;
+    /// <summary>
+    /// поднимает кегли к 0.75 по Y и отключает коллизию и гравитацию
+    /// </summary>
     public void LiftUp()
     {
         _liftDown = false;
         _liftUp = true;
         Collide(false);
     }
-
+    /// <summary>
+    /// опускает кегли к 0 по Y и отключает коллизию и гравитацию
+    /// </summary>
     public void LiftDown()
     {
         _liftDown = true;
         _liftUp = false;
-        //Collide(true);
     }
     
     private Vector3 _liftUpPosition;
@@ -46,7 +50,7 @@ public class Pins : MonoBehaviour
         {
             if (_pins[i].PinHit) continue;
             
-            if (Mathf.Abs(_pins[i].transform.rotation.x) >= 0.4 || Mathf.Abs(_pins[i].transform.rotation.z) >= 0.4)
+            if (Mathf.Abs(_pins[i].transform.rotation.x) >= 0.3 || Mathf.Abs(_pins[i].transform.rotation.z) >= 0.3)
             {
                 gameController.PinHit(_pins[i]);
                 _pins[i].transform.parent = null;
@@ -76,6 +80,10 @@ public class Pins : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Включает или выключает коллизию и гравитацию у всех несбитых кеглей
+    /// </summary>
+    /// <param name="collide"></param>
     public void Collide(bool collide)
     {
         foreach (Pin pin in _pins)
