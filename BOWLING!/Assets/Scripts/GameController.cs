@@ -13,11 +13,10 @@ public class GameController : MonoBehaviour
     private bool _ballThrown;
     
     private Coroutine _endTurnCorutine;
-    private bool _endTurn;
-    public GameObject pinsCleaner;
-    
+
+    public bool EndTurn { get; private set; }
+
     private Vector3 _ballDirection;
-    
     private bool _mousePressed;
     private Vector3 _mouseWorldPosition;
     private Vector2 _mouseDownPosition;
@@ -33,15 +32,15 @@ public class GameController : MonoBehaviour
 
     public CameraBehaviour mainCamera;
     
-    private Animator _pinsCleanerAnimator;
-    [SerializeField] private AnimationClip _pinsCleanerAnimationClip;
+    [SerializeField]
+    private Animator pinsCleanerAnimator;
+    [SerializeField] private AnimationClip pinsCleanerAnimationClip;
 
     public List<Player> players;
-    private int CurrentPlayerIndex;
+    private int _currentPlayerIndex;
     private void Start()
     {
         HitPins = new List<Pin>();
-        _pinsCleanerAnimator = pinsCleaner.GetComponent<Animator>();
     }
 
     public void GameStart()
@@ -50,7 +49,7 @@ public class GameController : MonoBehaviour
         {
             return;
         }
-        CurrentPlayerIndex = 0;
+        _currentPlayerIndex = 0;
     }    
     
     
@@ -80,7 +79,7 @@ public class GameController : MonoBehaviour
             RestartBall();
         }
 
-        if (!_endTurn && !_ballThrown)
+        if (!EndTurn && !_ballThrown)
         {
                 // при нажатии левой кнопки мыши запоминаются координаты и время нажатия
             if (Input.GetMouseButtonDown(0))
@@ -161,15 +160,16 @@ public class GameController : MonoBehaviour
     /// <param name="pin">Сбитая кегля</param>
     public void PinHit(Pin pin)
     {
-        if (!_endTurn)
+        if (!EndTurn)
         {
             mainCamera.target = mainCamera.cameraPoints[0].transform;
-        
+            
+            pinsCleanerAnimator.Play("SetCleaner");
             if (_endTurnCorutine != null)
             {
                 StopCoroutine(_endTurnCorutine);
             }
-            _endTurnCorutine = StartCoroutine(EndTurn());
+            _endTurnCorutine = StartCoroutine(EndTurnCorutine());
             if (pin != null)
             {
                 HitPins.Add(pin); 
@@ -181,32 +181,32 @@ public class GameController : MonoBehaviour
     /// <summary>
     ///  
     /// </summary>
-    IEnumerator EndTurn()
+    IEnumerator EndTurnCorutine()
     {   
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         // определяем первый или второй бросок
-        bool firstThrow = players[CurrentPlayerIndex].CurrentRound % 2 == 0 &&
-                          players[CurrentPlayerIndex].CurrentRound < 18;
-        _endTurn = true;
+        bool firstThrow = players[_currentPlayerIndex].CurrentRound % 2 == 0 &&
+                          players[_currentPlayerIndex].CurrentRound < 18;
+        EndTurn = true;
         
         // поднимаем кегли если это был первый бросок и сбиты не все кегли
         if (firstThrow && HitPins.Count != 10)
         {
             pins.LiftUp();
-            yield return  new WaitForSeconds(1);
+            //yield return  new WaitForSeconds(1);
         }
         
         // сборщик кеглей
-        _pinsCleanerAnimator.Play("Clean");
-        yield return new WaitForSeconds(_pinsCleanerAnimationClip.length);
+        pinsCleanerAnimator.Play("Clean");
+        yield return new WaitForSeconds(pinsCleanerAnimationClip.length);
         
-        players[CurrentPlayerIndex].AddScore(HitPins.Count);
-        players[CurrentPlayerIndex].CurrentRound++; 
+        players[_currentPlayerIndex].AddScore(HitPins.Count);
+        players[_currentPlayerIndex].CurrentRound++; 
 
         // добавляем еще +1 к счету раундов если при первом броске сбиты все кегли
         if (firstThrow && HitPins.Count == 10)
         {
-            players[CurrentPlayerIndex].CurrentRound++; 
+            players[_currentPlayerIndex].CurrentRound++; 
         }
         
         // опускаем кегли если это первый бросок
@@ -218,13 +218,13 @@ public class GameController : MonoBehaviour
         else
         {
             // меняем игрока на следующего если это второй бросок
-            if (CurrentPlayerIndex+1 < players.Count)
+            if (_currentPlayerIndex+1 < players.Count)
             {
-                CurrentPlayerIndex++;
+                _currentPlayerIndex++;
             }
             else
             {
-                CurrentPlayerIndex = 0;
+                _currentPlayerIndex = 0;
             }
             RestartBall();
             RestartPins();
@@ -233,9 +233,9 @@ public class GameController : MonoBehaviour
         yield return  new WaitForSeconds(1);
         pins.Collide(true);
         
-        Debug.Log("Ход: "+ players[CurrentPlayerIndex].Name);
+        Debug.Log("Ход: "+ players[_currentPlayerIndex].Name);
 
-        _endTurn = false;
+        EndTurn = false;
     }
     
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PinsTrigger : MonoBehaviour
+public class BallHitTrigger : MonoBehaviour
 {
     public GameController GameController;
     private void OnTriggerEnter(Collider other)
