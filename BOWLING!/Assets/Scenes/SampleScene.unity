@@ -3564,7 +3564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc0140858a733ed4bbeacd32152d140d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MouseDown: 0
   AbsMaxRotation: 3
   startPosition: {x: 0, y: 0.345, z: -6.265}
   minStrength: 5
@@ -3590,7 +3589,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151083579}
   serializedVersion: 2
-  m_Mass: 2.5
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0

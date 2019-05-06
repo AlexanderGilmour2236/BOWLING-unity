@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     /// </summary>
     private Vector3 _ballPosition;
     
-    public bool MouseDown;
+    public bool MouseDown { get; private set; }
     /// <summary>
     /// Максимальный поворот по модулю
     /// </summary>
@@ -57,6 +57,9 @@ public class Ball : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
     }
+    /// <summary>
+    /// Бросает шар с силой Strength
+    /// </summary>
     public void Throw()
     {
         _throw = true;
@@ -64,7 +67,10 @@ public class Ball : MonoBehaviour
         _rigidbody.AddForce(new Vector3(transform.forward.x * Strength, 0, transform.forward.z * Strength), ForceMode.VelocityChange);
     }
 
-    public void RollTo(Vector3 position)
+    /// <summary>
+    /// Меняет позицию к которой будет стремиться шар до броска
+    /// </summary>
+    public void MoveTo(Vector3 position)
     {
         _ballPosition = position;
     }
@@ -75,6 +81,11 @@ public class Ball : MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, _ballPosition, 5*Time.deltaTime);
         }
+        else if(MouseDown)
+        {
+            _rigidbody.AddForce(_ballPosition.x * 3 *Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+        }
+
     }
 
     private void OnMouseDown()

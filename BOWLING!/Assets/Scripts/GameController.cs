@@ -105,15 +105,35 @@ public class GameController : MonoBehaviour
                     }
                 }
 
-                // движение шара до броска
+                
                 if (ball.MouseDown)
                 {
-                    _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
-                        Input.mousePosition + new Vector3(0, 0, 1));
-                    _mouseWorldPosition.x = Mathf.Clamp(_mouseWorldPosition.x, -0.5f, 0.5f);
-                    _mouseWorldPosition.y = ball.transform.position.y;
-                    _mouseWorldPosition.z = ball.transform.position.z;
-                    ball.RollTo(_mouseWorldPosition);
+                    
+                    if (!_ballThrown)
+                    {
+                        // движение шара до броска
+                        _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                            Input.mousePosition + new Vector3(0, 0, 1));
+                        
+                        _mouseWorldPosition.x = Mathf.Clamp(_mouseWorldPosition.x, -0.5f, 0.5f);
+                        _mouseWorldPosition.y = ball.transform.position.y;
+                        _mouseWorldPosition.z = ball.transform.position.z;
+                        
+                        ball.MoveTo(_mouseWorldPosition);
+                    }
+                    else
+                    {
+                        // движение шара после броска
+                        _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                            Input.mousePosition + new Vector3(0, 0, 1));
+                        
+                        //_mouseWorldPosition.x = Mathf.Clamp(ball.transform.position.x, -0.5f, 0.5f);
+                        _mouseWorldPosition.x = _mouseWorldPosition.x - ball.transform.position.x;
+                        _mouseWorldPosition.y = ball.transform.position.y;
+                        _mouseWorldPosition.z = ball.transform.position.z;
+                        
+                        ball.MoveTo(_mouseWorldPosition);
+                    }
                 }
 
                 
@@ -128,8 +148,8 @@ public class GameController : MonoBehaviour
                     _mouseUpPosition = Input.mousePosition;
                 
                     if(_mouseUpPosition.y > _mouseDownPosition.y && 
-                       (_mouseUpPosition-_mouseDownPosition).magnitude > Screen.height/4 &&
-                       (_mouseUpPosition-_mouseDownPosition).y > Screen.height/4
+                       (_mouseUpPosition-_mouseDownPosition).magnitude > Screen.height/5 &&
+                       (_mouseUpPosition-_mouseDownPosition).y > Screen.height/5
                     )
                     {
                         if (_ballThrown == false)
@@ -161,8 +181,6 @@ public class GameController : MonoBehaviour
 
                                 strength /= timeEffect;
                             }
-                        
-                            strength = Mathf.Clamp(strength, ball.minStrength, ball.maxStrength);
                         
                             ball.Strength = strength;
                             ball.Throw();
