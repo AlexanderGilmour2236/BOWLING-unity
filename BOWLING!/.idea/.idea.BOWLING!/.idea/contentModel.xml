@@ -7,7 +7,7 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
-          <e p="BallBehaviour.cs" t="Include" />
+          <e p="Ball.cs" t="Include" />
           <e p="BallHitTrigger.cs" t="Include" />
           <e p="CameraBehaviour.cs" t="Include" />
           <e p="fpsCounter.cs" t="Include" />

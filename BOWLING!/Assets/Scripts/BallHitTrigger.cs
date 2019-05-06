@@ -7,8 +7,8 @@ public class BallHitTrigger : MonoBehaviour
     public GameController GameController;
     private void OnTriggerEnter(Collider other)
     {
-        BallBehaviour ball;
-        if ((ball = other.GetComponent<BallBehaviour>()) != null)
+        Ball ball;
+        if ((ball = other.GetComponent<Ball>()) != null)
         {
             GameController.PinHit(null);
         }

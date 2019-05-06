@@ -10,7 +10,9 @@ public class fpsCounter : MonoBehaviour
  
  
  
-    void Start(){
+    void Start()
+    {
+        Application.targetFrameRate = 60;
         StartCoroutine(FPS());
     }
  

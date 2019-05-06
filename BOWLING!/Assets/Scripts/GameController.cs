@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
-    public BallBehaviour ball;
+    public Ball ball;
 
     public Pins pins;
     public List<Pin> HitPins;
@@ -25,16 +26,14 @@ public class GameController : MonoBehaviour
     private DateTime _mouseDownTime;
     private DateTime _mouseUpTime;
     
-    public float minBallSpeed = 3;
-    public float maxBallSpeed = 10;
-    
     public float maxSlideTime = 500;
 
     public CameraBehaviour mainCamera;
     
     [SerializeField]
     private Animator pinsCleanerAnimator;
-    [SerializeField] private AnimationClip pinsCleanerAnimationClip;
+    [SerializeField] 
+    private AnimationClip pinsCleanerAnimationClip;
 
     public List<Player> players;
     private int _currentPlayerIndex;
@@ -50,9 +49,12 @@ public class GameController : MonoBehaviour
             return;
         }
         _currentPlayerIndex = 0;
-    }    
-    
-    
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
     /// <summary>
     /// Возвращает кегли в начальные позиции
     /// </summary>
@@ -73,84 +75,106 @@ public class GameController : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.R))
+        if (!EndTurn)
         {
-            RestartPins();
-            RestartBall();
-        }
-
-        if (!EndTurn && !_ballThrown)
-        {
-                // при нажатии левой кнопки мыши запоминаются координаты и время нажатия
+            
+            // при нажатии левой кнопки мыши запоминаются координаты и время нажатия
             if (Input.GetMouseButtonDown(0))
             {
-    
-                _mouseDownTime = DateTime.Now;
-                _mouseDownPosition = Input.mousePosition;
-                _mousePressed = true;
+                if (!_ballThrown)
+                {
+                    _mouseDownTime = DateTime.Now;
+                    _mouseDownPosition = Input.mousePosition;
+                    _mousePressed = true;
+                }
     
             }
             
             // при зажатой левой кнопке миши шар выполняет поворот относительно курсора
             if (Input.GetMouseButton(0))
             {
-    
+
                 if (_mousePressed)
                 {
-                    _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
-                    ball.transform.LookAt(new Vector3(_mouseWorldPosition.x, 0, 0));
+                    if (!_ballThrown)
+                    {
+                        _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                            Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
+                        ball.transform.LookAt(new Vector3(
+                            Mathf.Clamp(_mouseWorldPosition.x, -ball.AbsMaxRotation, ball.AbsMaxRotation), 0, 0));
+                    }
                 }
+
+                // движение шара до броска
+                if (ball.MouseDown)
+                {
+                    _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                        Input.mousePosition + new Vector3(0, 0, 1));
+                    _mouseWorldPosition.x = Mathf.Clamp(_mouseWorldPosition.x, -0.5f, 0.5f);
+                    _mouseWorldPosition.y = ball.transform.position.y;
+                    _mouseWorldPosition.z = ball.transform.position.z;
+                    ball.RollTo(_mouseWorldPosition);
+                }
+
+                
             }
             
             // при отжатии левой кнопки мыши высчитывается сила броска и выполняется функция ball.throw()
-            if (Input.GetMouseButtonUp(0))
-            {                    
-                _mouseUpTime = DateTime.Now;
-                _mouseUpPosition = Input.mousePosition;
-                
-                if(_mouseUpPosition.y > _mouseDownPosition.y)
+            if (Input.GetMouseButtonUp(0) && _mousePressed)
+            {
+                if (!_ballThrown)
                 {
-    
+                    _mouseUpTime = DateTime.Now;
+                    _mouseUpPosition = Input.mousePosition;
+                
+                    if(_mouseUpPosition.y > _mouseDownPosition.y && 
+                       (_mouseUpPosition-_mouseDownPosition).magnitude > Screen.height/4 &&
+                       (_mouseUpPosition-_mouseDownPosition).y > Screen.height/4
+                    )
+                    {
                         if (_ballThrown == false)
                         {
                             _ballThrown = true;
-    
+
                             //Screen.height = 100%
                             //SlideLength = x%
-    
+
                             float screenPercent = (_mouseUpPosition.y - _mouseDownPosition.y) * 100 / Screen.height;
-                            
+                        
                             // maxBallSpeed = 100%
                             // x = screenPercent
-    
-                            float strength = screenPercent * maxBallSpeed / 100;
-                            
+
+                            float strength = screenPercent * ball.maxStrength / 100;
+                        
                             float deltaTime = (float)(_mouseUpTime - _mouseDownTime).TotalSeconds;
-    
+
                             if (deltaTime >= maxSlideTime)
                             {
-                                strength = minBallSpeed;
+                                strength = ball.minStrength;
                             }
                             else
                             {
                                 // deltatime от 0 до maxSlideTime-1 делится на максимальное время свайпа для броска
                                 // получая величину от ~0 до 1, на которую делится сила броска
                                 float timeEffect =
-                                deltaTime / maxSlideTime;
-    
+                                    deltaTime / maxSlideTime;
+
                                 strength /= timeEffect;
                             }
-                            
-                            strength = Mathf.Clamp(strength, minBallSpeed, maxBallSpeed);
-                            
-                            ball.strength = strength;
+                        
+                            strength = Mathf.Clamp(strength, ball.minStrength, ball.maxStrength);
+                        
+                            ball.Strength = strength;
                             ball.Throw();
                         }
-    
+                    }
+                    _mousePressed = false;  
                 }
-                _mousePressed = false;
             }
         }
+        
+        
+        
     }
         
 
@@ -193,7 +217,6 @@ public class GameController : MonoBehaviour
         if (firstThrow && HitPins.Count != 10)
         {
             pins.LiftUp();
-            //yield return  new WaitForSeconds(1);
         }
         
         // сборщик кеглей
