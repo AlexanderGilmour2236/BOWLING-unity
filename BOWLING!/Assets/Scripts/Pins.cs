@@ -52,6 +52,7 @@ public class Pins : MonoBehaviour
         {
             if (_pins[i].PinHit) continue;
             
+            
             if (Mathf.Abs(_pins[i].transform.rotation.x) >= 0.2 || Mathf.Abs(_pins[i].transform.rotation.z) >= 0.2)
             {
                 gameController.PinHit(_pins[i]);

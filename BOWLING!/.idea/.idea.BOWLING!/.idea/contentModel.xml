@@ -11,6 +11,7 @@
           <e p="BallHitTrigger.cs" t="Include" />
           <e p="CameraBehaviour.cs" t="Include" />
           <e p="fpsCounter.cs" t="Include" />
+          <e p="Frame.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
           <e p="Pin.cs" t="Include" />
           <e p="Pins.cs" t="Include" />

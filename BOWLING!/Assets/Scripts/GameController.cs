@@ -36,7 +36,9 @@ public class GameController : MonoBehaviour
     private AnimationClip pinsCleanerAnimationClip;
 
     public List<Player> players;
-    private int _currentPlayerIndex;
+    public int CurrentPlayerIndex { get; private set; }
+    public Player CurrentPlayer => players[CurrentPlayerIndex];
+
     private void Start()
     {
         HitPins = new List<Pin>();
@@ -48,7 +50,7 @@ public class GameController : MonoBehaviour
         {
             return;
         }
-        _currentPlayerIndex = 0;
+        CurrentPlayerIndex = 0;
     }
 
     public void RestartScene()
@@ -212,7 +214,7 @@ public class GameController : MonoBehaviour
                 StopCoroutine(_endTurnCorutine);
             }
             _endTurnCorutine = StartCoroutine(EndTurnCorutine());
-            if (pin != null)
+            if (pin != null && !HitPins.Contains(pin))
             {
                 HitPins.Add(pin); 
             }
@@ -227,31 +229,37 @@ public class GameController : MonoBehaviour
     {   
         yield return new WaitForSeconds(1);
         // определяем первый или второй бросок
-        bool firstThrow = players[_currentPlayerIndex].CurrentRound % 2 == 0 &&
-                          players[_currentPlayerIndex].CurrentRound < 18;
+        int currentThrow = CurrentPlayer.CurrentFrame.CurrentThrow;
+        
         EndTurn = true;
         
         // поднимаем кегли если это был первый бросок и сбиты не все кегли
-        if (firstThrow && HitPins.Count != 10)
+        if (currentThrow == 0 && HitPins.Count != 10)
         {
             pins.LiftUp();
         }
-        
+
         // сборщик кеглей
         pinsCleanerAnimator.Play("Clean");
         yield return new WaitForSeconds(pinsCleanerAnimationClip.length);
-        
-        players[_currentPlayerIndex].AddScore(HitPins.Count);
-        players[_currentPlayerIndex].CurrentRound++; 
 
-        // добавляем еще +1 к счету раундов если при первом броске сбиты все кегли
-        if (firstThrow && HitPins.Count == 10)
+        if (currentThrow == 0)
         {
-            players[_currentPlayerIndex].CurrentRound++; 
+            CurrentPlayer.AddScore(HitPins.Count);
         }
+        else if (currentThrow == 1)
+        {
+            CurrentPlayer.AddScore(HitPins.Count - CurrentPlayer.CurrentFrame.FirstThrowScore);
+        }
+        else
+        {
+            CurrentPlayer.AddScore(HitPins.Count - CurrentPlayer.CurrentFrame.FirstThrowScore - CurrentPlayer.CurrentFrame.SecondThrowScore);
+        }
+            
+        Debug.Log(CurrentPlayer.ScoreString());
         
         // опускаем кегли если это первый бросок
-        if (firstThrow && HitPins.Count != 10)
+        if (currentThrow == 0 && HitPins.Count != 10)
         {
             pins.LiftDown();
             RestartBall();
@@ -259,13 +267,13 @@ public class GameController : MonoBehaviour
         else
         {
             // меняем игрока на следующего если это второй бросок
-            if (_currentPlayerIndex+1 < players.Count)
+            if (CurrentPlayerIndex+1 < players.Count)
             {
-                _currentPlayerIndex++;
+                CurrentPlayerIndex++;
             }
             else
             {
-                _currentPlayerIndex = 0;
+                CurrentPlayerIndex = 0;
             }
             RestartBall();
             RestartPins();
@@ -273,8 +281,6 @@ public class GameController : MonoBehaviour
         
         yield return  new WaitForSeconds(1);
         pins.Collide(true);
-        
-        Debug.Log("Ход: "+ players[_currentPlayerIndex].Name);
 
         EndTurn = false;
     }
