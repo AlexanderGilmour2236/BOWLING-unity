@@ -75,11 +75,14 @@ public class Frame
             {
                 SecondThrowScore = score;
             }
-           
-                
+            
             if (FirstThrowScore + SecondThrowScore == 10)
             {
-                IsSpare = true;
+                if (!IsStrike)
+                {
+                    IsSpare = true;
+                }
+
             }
     }
 }

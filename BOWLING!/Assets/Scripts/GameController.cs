@@ -274,6 +274,9 @@ public class GameController : MonoBehaviour
             CurrentPlayer.AddScore(HitPins.Count - CurrentPlayer.CurrentFrame.FirstThrowScore);
         }
         
+        scoreSheet.LoadPlayer(CurrentPlayer);
+        scoreSheet.Show();
+        
         // поднимаем кегли если это был первый бросок и сбиты не все кегли
         if (!CurrentPlayer.CurrentFrame.IsComplete)
         {
@@ -289,9 +292,6 @@ public class GameController : MonoBehaviour
         {
             pins.LiftDown();
             RestartBall();
-            
-            scoreSheet.LoadPlayer(CurrentPlayer);
-            scoreSheet.Show();
         }
         else
         {

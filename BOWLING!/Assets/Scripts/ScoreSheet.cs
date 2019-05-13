@@ -10,7 +10,7 @@ public class ScoreSheet : MonoBehaviour
 
     public Text playerNameLabel;
     public Text TotalScoreLabel;
-    public List<UiFrame> Frames = new List<UiFrame>();
+    public List<UiFrame> UIFrames = new List<UiFrame>();
     private bool _isHidden = true;
 
 private Animator _animator;
@@ -24,13 +24,13 @@ private Animator _animator;
             if (frame.gameObject.tag == "frame")
             {
                 
-                Frames.Add(
+                UIFrames.Add(
                     new UiFrame(
                     frame.transform.GetChild(0).GetComponent<Text>(),
                     frame.transform.GetChild(1).GetComponent<Text>(),
                     frame.transform.GetChild(2).GetComponent<Text>(),
                     //10-й фрейм содержит третье поле
-                    (frame.transform.childCount==4) ? frame.transform.GetChild(3).GetComponent<Text>() : null
+                    (frame.transform.childCount>=4) ? frame.transform.GetChild(2).GetComponent<Text>() : null
                     )
                 );
             }
@@ -59,44 +59,125 @@ private Animator _animator;
     {
         playerNameLabel.text = player.Name;
         
-        for (int i = 0; i < Frames.Count-1; i++)
+        // Расчет очков с 1 до первых двух бросков 10 фрейма
+        for (int i = 0; i < UIFrames.Count; i++)
         {
-
-            Frames[i].FirstThrowLabel.text = player.Frames[i].FirstThrowScore.ToString();
+            UIFrames[i].FirstThrowLabel.text = player.Frames[i].FirstThrowScore.ToString();
+            
             if (player.Frames[i].IsStrike)
-            {   Frames[i].FirstThrowLabel.text = "X";
-                Frames[i].SecondThrowLabel.text = "-";
+            {   UIFrames[i].FirstThrowLabel.text = "X";
+                if (i < 9)
+                {
+                    UIFrames[i].SecondThrowLabel.text = "-";
+                }
                 continue;
             }
 
             if (player.Frames[i].IsSpare)
             {
-                Frames[i].FirstThrowLabel.text = player.Frames[i].FirstThrowScore.ToString();
-                Frames[i].SecondThrowLabel.text = "/";
+                UIFrames[i].FirstThrowLabel.text = player.Frames[i].FirstThrowScore.ToString();
+                UIFrames[i].SecondThrowLabel.text = "/";
                 continue;
             }
             
             if (player.Frames[i].FirstThrowScore == -1)
             {
-                Frames[i].FirstThrowLabel.text = "";
+                UIFrames[i].FirstThrowLabel.text = "";
             }
             else
             {
-                Frames[i].FirstThrowLabel.text = player.Frames[i].FirstThrowScore.ToString();
+                UIFrames[i].FirstThrowLabel.text = player.Frames[i].FirstThrowScore.ToString();
             }
             
             if (player.Frames[i].SecondThrowScore == -1)
             {
-                Frames[i].SecondThrowLabel.text = "";
+                UIFrames[i].SecondThrowLabel.text = "";
             }
             else
             {
-                Frames[i].SecondThrowLabel.text = player.Frames[i].SecondThrowScore.ToString();
+                UIFrames[i].SecondThrowLabel.text = player.Frames[i].SecondThrowScore.ToString();
             }
-            
-            
-
         }
+
+        if (player.Frames.Count == 10)
+        {
+            UIFrames[9].ThirdThrowLabel.text = "";
+        }
+        // Если в 10-м фрейме был выбит страйк или spare
+        if (player.Frames.Count == 11)
+        {
+            if (player.Frames[9].IsSpare)
+            {
+                // Если в 10 фрейме за первые два броска был выбит spare
+                if (player.Frames[10].FirstThrowScore != -1)
+                {
+                    if (player.Frames[10].IsStrike)
+                    {
+                        UIFrames[9].ThirdThrowLabel.text = "X";
+                    }
+                    else
+                    {
+                        UIFrames[9].ThirdThrowLabel.text = player.Frames[10].FirstThrowScore.ToString();    
+                    }
+                }
+                else
+                {
+                    UIFrames[9].ThirdThrowLabel.text = "";
+                }
+            }
+            else
+            {
+                // Если первый бросок был Страйк
+                if (player.Frames[10].FirstThrowScore != -1)
+                {
+                    UIFrames[9].SecondThrowLabel.text = player.Frames[10].FirstThrowScore.ToString();   
+                }
+                else
+                {
+                    UIFrames[9].SecondThrowLabel.text = "";
+                }
+
+                if (player.Frames[10].SecondThrowScore != -1)
+                {
+                    if (player.Frames[10].IsSpare)
+                    {
+                        UIFrames[9].ThirdThrowLabel.text = "/";
+                    }
+                    else
+                    {
+                        UIFrames[9].ThirdThrowLabel.text = player.Frames[10].SecondThrowScore.ToString(); 
+                    }
+                }
+                else
+                {
+                    UIFrames[9].ThirdThrowLabel.text = "";
+                }
+            }
+        }
+        
+        // Если в 10 фрейме было выбито 2 страйка 
+        if (player.Frames.Count == 12)
+        {
+            UIFrames[9].FirstThrowLabel.text = "X";
+            UIFrames[9].SecondThrowLabel.text = "X";
+            if (player.Frames[11].IsStrike)
+            {
+                UIFrames[9].ThirdThrowLabel.text = (player.Frames[11].IsStrike) ? "X" : player.Frames[11].FirstThrowScore.ToString();
+            }
+            else
+            {
+                if (player.Frames[11].FirstThrowScore != -1)
+                {
+                    UIFrames[9].ThirdThrowLabel.text = player.Frames[11].FirstThrowScore.ToString();
+                }
+                else
+                {
+                    UIFrames[9].ThirdThrowLabel.text = "";
+                }
+            }
+        }
+        
+            
     }
 }
 
