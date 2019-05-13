@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 
     public bool IsGameOver => CurrentFrameIndex >= Frames.Count;
     
-    private List<Frame> Frames;
+    public List<Frame> Frames { get; private set; }
     
     void Start()
     {
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
             Frames.Add(new Frame());  
         }
 
-        CurrentFrameIndex = 8;
+        CurrentFrameIndex = 0;
     }
 
     public string ScoreString()

@@ -35,6 +35,8 @@ public class GameController : MonoBehaviour
     public Text ScoreLabel;
     public Text PlayerNameLabel;
 
+    public ScoreSheet scoreSheet;
+    
     [SerializeField] private Animator pinsCleanerAnimator;
     [SerializeField] private AnimationClip pinsCleanerAnimationClip;
 
@@ -109,7 +111,8 @@ public class GameController : MonoBehaviour
             // при зажатой левой кнопке миши шар выполняет поворот относительно курсора
             if (Input.GetMouseButton(0))
             {
-
+                scoreSheet.Hide();
+                
                 if (_mousePressed)
                 {
                     if (!_ballThrown)
@@ -124,7 +127,7 @@ public class GameController : MonoBehaviour
 
                 if (ball.MouseDown)
                 {
-
+                    
                     if (!_ballThrown)
                     {
                         // движение шара до броска
@@ -251,7 +254,7 @@ public class GameController : MonoBehaviour
     }
     
     /// <summary>
-    /// Всё что происходит после 
+    /// Всё что происходит после сбития кегли
     /// </summary>
     IEnumerator EndTurnCorutine()
     {
@@ -286,6 +289,9 @@ public class GameController : MonoBehaviour
         {
             pins.LiftDown();
             RestartBall();
+            
+            scoreSheet.LoadPlayer(CurrentPlayer);
+            scoreSheet.Show();
         }
         else
         {
@@ -293,6 +299,7 @@ public class GameController : MonoBehaviour
             if (CurrentPlayer.CurrentFrame.IsComplete)
             {
                 CurrentPlayer.NextFrame();
+
                 
                 if (CurrentPlayer.CurrentFrameIndex <= 9)
                 {
@@ -306,6 +313,9 @@ public class GameController : MonoBehaviour
                     }
                 }
                 
+                scoreSheet.LoadPlayer(CurrentPlayer);
+                scoreSheet.Show();
+                
             }
             
             if (!CurrentPlayer.IsGameOver)
@@ -316,9 +326,12 @@ public class GameController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1);
+        
         pins.Collide(true);
         
         EndTurn = false;
+        yield return new WaitForSeconds(2);
+        scoreSheet.Hide();
     }
 
 }
