@@ -7,37 +7,9 @@ public class Frame
 {
     public int FirstThrowScore { get; private set; }
     public int SecondThrowScore { get; private set; }
-    public int ThirdThrowScore { get; private set; }
-    
-    public int Total
-    {
-        get
-        {
-            if (!IsTenthFrame)
-            {
-                return FirstThrowScore + SecondThrowScore;
-            }
-            else
-            {
-                return FirstThrowScore + SecondThrowScore + ThirdThrowScore; 
-            }
-        }
-    } 
 
-    public bool IsComplete
-    {
-        get
-        {
-            if (!IsTenthFrame)
-            {
-                return FirstThrowScore != -1 && SecondThrowScore != -1;
-            }
-            else
-            {
-                return FirstThrowScore != -1 && SecondThrowScore != -1 && ThirdThrowScore != -1;
-            }
-        }
-    }
+    public int Total => FirstThrowScore + SecondThrowScore;
+    public bool IsComplete => FirstThrowScore != -1 && SecondThrowScore != -1;
 
     public int CurrentThrow
     {
@@ -51,17 +23,12 @@ public class Frame
             {
                 return 1;
             }
-            else if (IsTenthFrame && ThirdThrowScore == -1)
-            {
-                return 2;
-            }
             else
             {
                 return -1;
             }
         }
     }
-    public bool IsTenthFrame { get; set; }
     
     public bool IsStrike { get; private set; }
     public bool IsSpare { get; private set; }
@@ -70,44 +37,49 @@ public class Frame
     {
         Restart();
     }
-    
-    public void Restart()
+    public Frame(int firstThrowScore, int secondThrowScore)
+    {
+        FirstThrowScore = firstThrowScore;
+        SecondThrowScore = secondThrowScore;
+    }
+    /// <summary>
+    /// Обнуляет фрейм до начальных значений
+    /// </summary>
+    void Restart()
     {
         FirstThrowScore = -1;
         SecondThrowScore = -1;
-        ThirdThrowScore = -1;
         
         IsSpare = false;
         IsStrike = false;
-        IsTenthFrame = false;
     }
 
+    /// <summary>
+    /// Добавляет очки в один из бросков
+    /// </summary>
+    /// <param name="score"></param>
     public void AddScore(int score)
 
     {
-        if (FirstThrowScore == -1)
-        {
-            FirstThrowScore = score;
-         
-            if (score == 10)
+            if (FirstThrowScore == -1)
             {
-                SecondThrowScore = 0;
-                IsStrike = true;
+                FirstThrowScore = score;
+             
+                if (score == 10)
+                {
+                    SecondThrowScore = 0;
+                    IsStrike = true;
+                }
             }
-        }
-        else
-        {
-            if (SecondThrowScore == -1)
+            else if (SecondThrowScore == -1)
             {
                 SecondThrowScore = score;
             }
+           
                 
             if (FirstThrowScore + SecondThrowScore == 10)
             {
                 IsSpare = true;
             }
-        }
-        
-
     }
 }

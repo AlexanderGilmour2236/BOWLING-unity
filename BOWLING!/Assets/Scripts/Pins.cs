@@ -83,6 +83,15 @@ public class Pins : MonoBehaviour
         }
     }
 
+    public void Strike()
+    {
+        foreach (Pin pin in _pins)
+        {
+            if(!pin.PinHit)
+            gameController.PinHit(pin);
+        }
+    }
+    
     /// <summary>
     /// Включает или выключает коллизию и гравитацию у всех несбитых кеглей
     /// </summary>

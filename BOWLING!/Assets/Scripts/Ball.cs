@@ -50,9 +50,12 @@ public class Ball : MonoBehaviour
     public void ToStart()
     {
         _throw = false;
+        
         transform.position = startPosition;
         transform.localEulerAngles = Vector3.forward;
+        
         _ballPosition = startPosition;
+        
         _rigidbody.useGravity = false;
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -65,6 +68,7 @@ public class Ball : MonoBehaviour
         _throw = true;
         _rigidbody.useGravity = true;
         _rigidbody.AddForce(new Vector3(transform.forward.x * Strength, 0, transform.forward.z * Strength), ForceMode.VelocityChange);
+        _ballPosition.x = 0;
     }
 
     /// <summary>
@@ -81,9 +85,9 @@ public class Ball : MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, _ballPosition, 5*Time.deltaTime);
         }
-        else if(MouseDown)
+        else
         {
-            _rigidbody.AddForce(_ballPosition.x * 3 *Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+            _rigidbody.AddForce(_ballPosition.x/30, 0, 0, ForceMode.VelocityChange);
         }
 
     }
