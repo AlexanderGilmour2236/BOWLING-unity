@@ -13,6 +13,7 @@
           <e p="fpsCounter.cs" t="Include" />
           <e p="Frame.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
+          <e p="LoadingControl.cs" t="Include" />
           <e p="Pin.cs" t="Include" />
           <e p="Pins.cs" t="Include" />
           <e p="PinsDownTrigger.cs" t="Include" />
