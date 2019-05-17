@@ -35,7 +35,8 @@ public class GameController : MonoBehaviour
     public Text ScoreLabel;
     public Text PlayerNameLabel;
 
-    public ScoreSheet scoreSheet;
+    [SerializeField] private ScoreSheet scoreSheet;
+    [SerializeField] private PopUpLabel popUpLabel;
     
     [SerializeField] private Animator pinsCleanerAnimator;
     [SerializeField] private AnimationClip pinsCleanerAnimationClip;
@@ -267,11 +268,23 @@ public class GameController : MonoBehaviour
         if (currentThrow == 0)
         {
             CurrentPlayer.AddScore(HitPins.Count);
+            if (CurrentPlayer.CurrentFrame.FirstThrowScore == 0)
+            {
+                popUpLabel.Text = "GUTTER";
+                popUpLabel.Show();
+            }
         }
         else if (currentThrow == 1)
         {
             CurrentPlayer.AddScore(HitPins.Count - CurrentPlayer.CurrentFrame.FirstThrowScore);
+            if (CurrentPlayer.CurrentFrame.SecondThrowScore == 0)
+            {
+                popUpLabel.Text = "GUTTER";
+                popUpLabel.Show();
+            }
         }
+        
+        
         
         scoreSheet.LoadPlayer(CurrentPlayer);
         scoreSheet.Show();
@@ -280,6 +293,20 @@ public class GameController : MonoBehaviour
         if (!CurrentPlayer.CurrentFrame.IsComplete)
         {
             pins.LiftUp();
+        }
+        else
+        {
+            if (CurrentPlayer.CurrentFrame.IsStrike)
+            {
+                popUpLabel.Text = "STRIKE!";
+                popUpLabel.Show();
+            }
+
+            if (CurrentPlayer.CurrentFrame.IsSpare)
+            {
+                popUpLabel.Text = "SPARE";
+                popUpLabel.Show();
+            }
         }
 
         // сборщик кеглей
@@ -295,27 +322,21 @@ public class GameController : MonoBehaviour
         else
         {
             // меняем фрейм на следующий и игрока на следующего если этот фрейм окончен
-            if (CurrentPlayer.CurrentFrame.IsComplete)
+            CurrentPlayer.NextFrame();
+            
+            if (CurrentPlayer.CurrentFrameIndex <= 9)
             {
-                CurrentPlayer.NextFrame();
-
-                
-                if (CurrentPlayer.CurrentFrameIndex <= 9)
+                NextPlayer();
+            }
+            else
+            {
+                if (CurrentPlayer.IsGameOver)
                 {
                     NextPlayer();
                 }
-                else
-                {
-                    if (CurrentPlayer.IsGameOver)
-                    {
-                        NextPlayer();
-                    }
-                }
-                
-                scoreSheet.LoadPlayer(CurrentPlayer);
-                //scoreSheet.Show();
-                
             }
+            
+            scoreSheet.LoadPlayer(CurrentPlayer);
             
             if (!CurrentPlayer.IsGameOver)
             {
