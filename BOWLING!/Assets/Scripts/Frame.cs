@@ -8,7 +8,20 @@ public class Frame
     public int FirstThrowScore { get; private set; }
     public int SecondThrowScore { get; private set; }
 
-    public int Total => FirstThrowScore + SecondThrowScore;
+    /// <summary>
+    /// Количество очков за два броска
+    /// </summary>
+    public int Total
+    {
+        get
+        {
+            int total = 0;
+            if (FirstThrowScore != -1) total += FirstThrowScore;
+            if (SecondThrowScore != -1) total += SecondThrowScore;
+            return total;
+        }
+    }
+
     public bool IsComplete => FirstThrowScore != -1 && SecondThrowScore != -1;
 
     public int CurrentThrow

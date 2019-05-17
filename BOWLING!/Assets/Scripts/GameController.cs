@@ -90,9 +90,11 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        PlayerNameLabel.text = CurrentPlayer.Name;
-        ScoreLabel.text = CurrentPlayer.ScoreString();
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            scoreSheet.Hide();
+        }
+
         if (!EndTurn)
         {
 
@@ -110,9 +112,7 @@ public class GameController : MonoBehaviour
 
             // при зажатой левой кнопке миши шар выполняет поворот относительно курсора
             if (Input.GetMouseButton(0))
-            {
-                scoreSheet.Hide();
-                
+            {   
                 if (_mousePressed)
                 {
                     if (!_ballThrown)
@@ -259,11 +259,10 @@ public class GameController : MonoBehaviour
     IEnumerator EndTurnCorutine()
     {
         yield return new WaitForSeconds(1);
+        EndTurn = true;
 
         // определяем первый или второй бросок
         int currentThrow = CurrentPlayer.CurrentFrame.CurrentThrow;
-
-        EndTurn = true;
         
         if (currentThrow == 0)
         {
@@ -314,7 +313,7 @@ public class GameController : MonoBehaviour
                 }
                 
                 scoreSheet.LoadPlayer(CurrentPlayer);
-                scoreSheet.Show();
+                //scoreSheet.Show();
                 
             }
             
@@ -330,8 +329,6 @@ public class GameController : MonoBehaviour
         pins.Collide(true);
         
         EndTurn = false;
-        yield return new WaitForSeconds(2);
-        scoreSheet.Hide();
     }
 
 }
