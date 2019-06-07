@@ -13,11 +13,15 @@
           <e p="fpsCounter.cs" t="Include" />
           <e p="Frame.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
+          <e p="InputMenu.cs" t="Include" />
           <e p="LoadingControl.cs" t="Include" />
+          <e p="Menu.cs" t="Include" />
+          <e p="MenuController.cs" t="Include" />
           <e p="Pin.cs" t="Include" />
           <e p="Pins.cs" t="Include" />
           <e p="PinsDownTrigger.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="PlayerChoseMenu.cs" t="Include" />
           <e p="PopUpLabel.cs" t="Include" />
           <e p="ScoreSheet.cs" t="Include" />
         </e>

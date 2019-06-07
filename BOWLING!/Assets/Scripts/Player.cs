@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player
 {
     public int ID;
     public string Name;
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     
     public List<Frame> Frames { get; private set; }
     
-    void Start()
+    public Player()
     {
         Restart();
     }

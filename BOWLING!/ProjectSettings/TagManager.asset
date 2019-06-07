@@ -6,6 +6,7 @@ TagManager:
   tags:
   - frame
   - Savable
+  - Input
   layers:
   - Default
   - TransparentFX

@@ -6,9 +6,9 @@ public class ScoreSheet : MonoBehaviour
 {
     public Player CurrentPlayer { get; private set; }
 
-    public Text playerNameLabel;
-    public Text TotalScoreLabel;
-    public List<UiFrame> UIFrames = new List<UiFrame>();
+    [SerializeField] Text playerNameLabel;
+    [SerializeField] Text TotalScoreLabel;
+    private List<UiFrame> UIFrames = new List<UiFrame>();
     private bool _isHidden = true;
 
     private Animator _animator;

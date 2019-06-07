@@ -1,25 +1,77 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum GameMode{
+   MainMenu,
+   Game,
+   Options,
+   HighScores
+}
+
+public class OnGameStartEventArgs
+{
+    public List<Player> Players;
+}
+
+
 public class GameController : MonoBehaviour
 {
-    public Ball ball;
+    #region Singleton
 
-    public Pins pins;
-    public List<Pin> HitPins;
+    private static GameController _instance;
 
+    public static GameController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject ins = new GameObject("GameController");
+                ins.AddComponent<GameController>();
+            }
+
+            return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
+    #endregion
+    
+    public GameMode GameMode { get; private set; }
+    
+    [SerializeField]
+    private Ball ball;
+    [SerializeField]
+    private Pins pins;
+    
+    /// <summary>
+    /// Коллекция сбитых кеглей
+    /// </summary>
+    private List<Pin> _hitPins;
+    
+    /// <summary>
+    /// true если шар брошен
+    /// </summary>
     private bool _ballThrown;
 
-    private Coroutine _endTurnCorutine;
+    private Coroutine _endTurn;
 
+    /// <summary>
+    /// true если это конец хода (подсчет очков)
+    /// </summary>
     public bool EndTurn { get; private set; }
-
-    private Vector3 _ballDirection;
+    
     private bool _mousePressed;
     private Vector3 _mouseWorldPosition;
     private Vector2 _mouseDownPosition;
@@ -28,36 +80,64 @@ public class GameController : MonoBehaviour
     private DateTime _mouseDownTime;
     private DateTime _mouseUpTime;
 
-    public float maxSlideTime = 500;
+    [SerializeField] private MenuController menuController;
+    
+    
+    /// <summary>
+    /// Время слайда, при достижении которого шар будет лететь с минимальной скоростью
+    /// </summary>
+    [SerializeField]
+    private float maxSlideTime = 500;
 
-    public CameraBehaviour mainCamera;
-
-    public Text ScoreLabel;
-    public Text PlayerNameLabel;
+    [SerializeField]
+    private CameraBehaviour mainCamera;
 
     [SerializeField] private ScoreSheet scoreSheet;
+    /// <summary>
+    /// Всплывающий текст после особых ходов (страйк, спэйр)
+    /// </summary>
     [SerializeField] private PopUpLabel popUpLabel;
     
     [SerializeField] private Animator pinsCleanerAnimator;
     [SerializeField] private AnimationClip pinsCleanerAnimationClip;
 
-    public List<Player> players;
+    public List<Player> Players { get; private set; }
     public int CurrentPlayerIndex { get; private set; }
-    public Player CurrentPlayer => players[CurrentPlayerIndex];
+    public Player CurrentPlayer => Players[CurrentPlayerIndex];
 
     private void Start()
     {
-        HitPins = new List<Pin>();
+     
+        Debug.Log("GameController");
+        _hitPins = new List<Pin>();
+        GameMode = GameMode.MainMenu;
+
+        ToMainMenu();
+    }
+    
+    private void ToMainMenu()
+    {
+        menuController.MainMenu();
     }
 
-    public void GameStart()
+    public void GameStart(List<Player> players)
     {
-        if (players.Count < 1)
+        Debug.Log("Game Start");
+        if (players == null || players.Count < 1)
         {
+            Debug.Log("0 Players");
             return;
         }
-
+        _hitPins.Clear();
+        
         CurrentPlayerIndex = 0;
+        
+        GameMode = GameMode.Game;
+        
+        RestartBall();
+        RestartPins();
+        
+        Players = players;
     }
 
     public void Strike()
@@ -73,147 +153,148 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// Возвращает кегли в начальные позиции
     /// </summary>
-    public void RestartPins()
+    private void RestartPins()
     {
         pins.Restart();
-        HitPins.Clear();
+        _hitPins.Clear();
     }
 
     /// <summary>
     /// Возвращает шар в начальные позиции
     /// </summary>
-    public void RestartBall()
+    private void RestartBall()
     {
         _ballThrown = false;
         ball.ToStart();
         mainCamera.target = ball.transform;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (GameMode == GameMode.Game)
         {
-            scoreSheet.Hide();
-        }
-
-        if (!EndTurn)
-        {
-
-            // при нажатии левой кнопки мыши запоминаются координаты и время нажатия
-            if (Input.GetMouseButtonDown(0))
+             if (Input.GetMouseButtonDown(0))
             {
-                if (!_ballThrown)
-                {
-                    _mouseDownTime = DateTime.Now;
-                    _mouseDownPosition = Input.mousePosition;
-                    _mousePressed = true;
-                }
-
+                scoreSheet.Hide();
             }
-
-            // при зажатой левой кнопке миши шар выполняет поворот относительно курсора
-            if (Input.GetMouseButton(0))
-            {   
-                if (_mousePressed)
+    
+            if (!EndTurn)
+            {
+    
+                // при нажатии левой кнопки мыши запоминаются координаты и время нажатия
+                if (Input.GetMouseButtonDown(0))
                 {
                     if (!_ballThrown)
                     {
-                        _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
-                            Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
-                        ball.transform.LookAt(new Vector3(
-                            Mathf.Clamp(_mouseWorldPosition.x, -ball.AbsMaxRotation, ball.AbsMaxRotation), 0, 0));
+                        _mouseDownTime = DateTime.Now;
+                        _mouseDownPosition = Input.mousePosition;
+                        _mousePressed = true;
                     }
+    
                 }
-
-
-                if (ball.MouseDown)
-                {
-                    
-                    if (!_ballThrown)
+    
+                // при зажатой левой кнопке миши шар выполняет поворот относительно курсора
+                if (Input.GetMouseButton(0))
+                {   
+                    if (_mousePressed)
                     {
-                        // движение шара до броска
-                        _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
-                            Input.mousePosition + new Vector3(0, 0, 1));
-
-                        _mouseWorldPosition.x = Mathf.Clamp(_mouseWorldPosition.x, -0.5f, 0.5f);
-                        _mouseWorldPosition.y = ball.transform.position.y;
-                        _mouseWorldPosition.z = ball.transform.position.z;
-
-                        ball.MoveTo(_mouseWorldPosition);
-                    }
-                }
-
-                if (_ballThrown)
-                {
-                    // поворот шара после броска
-                    _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
-                        Input.mousePosition + new Vector3(0, 0, 1));
-
-                    _mouseWorldPosition.x = _mouseWorldPosition.x - ball.transform.position.x;
-                    _mouseWorldPosition.y = ball.transform.position.y;
-                    _mouseWorldPosition.z = ball.transform.position.z;
-
-                    ball.MoveTo(_mouseWorldPosition);
-                }
-
-
-            }
-
-            // при отжатии левой кнопки мыши высчитывается сила броска и выполняется функция ball.throw()
-            if (Input.GetMouseButtonUp(0) && _mousePressed)
-            {
-                if (!_ballThrown)
-                {
-                    _mouseUpTime = DateTime.Now;
-                    _mouseUpPosition = Input.mousePosition;
-
-                    if (_mouseUpPosition.y > _mouseDownPosition.y &&
-                        (_mouseUpPosition - _mouseDownPosition).magnitude > Screen.height / 5 &&
-                        (_mouseUpPosition - _mouseDownPosition).y > Screen.height / 5
-                    )
-                    {
-                        if (_ballThrown == false)
+                        if (!_ballThrown)
                         {
-                            _ballThrown = true;
-
-                            //Screen.height = 100%
-                            //SlideLength = x%
-
-                            float screenPercent = (_mouseUpPosition.y - _mouseDownPosition.y) * 100 / Screen.height;
-
-                            // maxBallSpeed = 100%
-                            // x = screenPercent
-
-                            float strength = screenPercent * ball.maxStrength / 100;
-
-                            float deltaTime = (float) (_mouseUpTime - _mouseDownTime).TotalSeconds;
-
-                            if (deltaTime >= maxSlideTime)
-                            {
-                                strength = ball.minStrength;
-                            }
-                            else
-                            {
-                                // deltatime от 0 до maxSlideTime-1 делится на максимальное время свайпа для броска
-                                // получая величину от ~0 до 1, на которую делится сила броска
-                                float timeEffect =
-                                    deltaTime / maxSlideTime;
-
-                                strength /= timeEffect;
-                            }
-
-                            ball.Strength = strength;
-                            ball.Throw();
+                            _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                                Input.mousePosition + new Vector3(0, 0, pins.gameObject.transform.position.z));
+                            ball.transform.LookAt(new Vector3(
+                                Mathf.Clamp(_mouseWorldPosition.x, -ball.AbsMaxRotation, ball.AbsMaxRotation), 0, 0));
                         }
                     }
-
-                    _mousePressed = false;
+    
+    
+                    if (ball.MouseDown)
+                    {
+                        
+                        if (!_ballThrown)
+                        {
+                            // движение шара до броска
+                            _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                                Input.mousePosition + new Vector3(0, 0, 1));
+    
+                            _mouseWorldPosition.x = Mathf.Clamp(_mouseWorldPosition.x, -0.5f, 0.5f);
+                            _mouseWorldPosition.y = ball.transform.position.y;
+                            _mouseWorldPosition.z = ball.transform.position.z;
+    
+                            ball.MoveTo(_mouseWorldPosition);
+                        }
+                    }
+    
+                    if (_ballThrown)
+                    {
+                        // поворот шара после броска
+                        _mouseWorldPosition = mainCamera.Camera.ScreenToWorldPoint(
+                            Input.mousePosition + new Vector3(0, 0, 1));
+    
+                        _mouseWorldPosition.x = _mouseWorldPosition.x - ball.transform.position.x;
+                        _mouseWorldPosition.y = ball.transform.position.y;
+                        _mouseWorldPosition.z = ball.transform.position.z;
+    
+                        ball.MoveTo(_mouseWorldPosition);
+                    }
+    
+    
+                }
+    
+                // при отжатии левой кнопки мыши высчитывается сила броска и выполняется функция ball.throw()
+                if (Input.GetMouseButtonUp(0) && _mousePressed)
+                {
+                    if (!_ballThrown)
+                    {
+                        _mouseUpTime = DateTime.Now;
+                        _mouseUpPosition = Input.mousePosition;
+    
+                        if (_mouseUpPosition.y > _mouseDownPosition.y &&
+                            (_mouseUpPosition - _mouseDownPosition).magnitude > Screen.height / 5 &&
+                            (_mouseUpPosition - _mouseDownPosition).y > Screen.height / 5
+                        )
+                        {
+                            if (_ballThrown == false)
+                            {
+                                _ballThrown = true;
+    
+                                //Screen.height = 100%
+                                //SlideLength = x%
+    
+                                float screenPercent = (_mouseUpPosition.y - _mouseDownPosition.y) * 100 / Screen.height;
+    
+                                // maxBallSpeed = 100%
+                                // x = screenPercent
+    
+                                float strength = screenPercent * ball.maxStrength / 100;
+    
+                                float deltaTime = (float) (_mouseUpTime - _mouseDownTime).TotalSeconds;
+    
+                                if (deltaTime >= maxSlideTime)
+                                {
+                                    strength = ball.minStrength;
+                                }
+                                else
+                                {
+                                    // deltatime от 0 до maxSlideTime-1 делится на максимальное время свайпа для броска
+                                    // получая величину от ~0 до 1, на которую делится сила броска
+                                    float timeEffect =
+                                        deltaTime / maxSlideTime;
+    
+                                    strength /= timeEffect;
+                                }
+    
+                                ball.Strength = strength;
+                                ball.Throw();
+                            }
+                        }
+    
+                        _mousePressed = false;
+                    }
                 }
             }
         }
-
-
-
+       
     }
 
 
@@ -228,23 +309,26 @@ public class GameController : MonoBehaviour
             mainCamera.target = mainCamera.cameraPoints[0].transform;
 
             pinsCleanerAnimator.Play("SetCleaner");
-            if (_endTurnCorutine != null)
+            if (_endTurn != null)
             {
-                StopCoroutine(_endTurnCorutine);
+                StopCoroutine(_endTurn);
             }
 
-            _endTurnCorutine = StartCoroutine(EndTurnCorutine());
-            if (pin != null && !HitPins.Contains(pin))
+            _endTurn = StartCoroutine(EndTurnCorutine());
+            if (pin != null && !_hitPins.Contains(pin))
             {
-                HitPins.Add(pin);
+                _hitPins.Add(pin);
             }
         }
 
     }
 
-    void NextPlayer()
+    /// <summary>
+    /// Меняет текущего игрока на следующего, если игрок последний - меняет текущего игрока на первого
+    /// </summary>
+    private void NextPlayer()
     {
-        if (CurrentPlayerIndex + 1 < players.Count)
+        if (CurrentPlayerIndex + 1 < Players.Count)
         {
             CurrentPlayerIndex++;
         }
@@ -267,7 +351,7 @@ public class GameController : MonoBehaviour
         
         if (currentThrow == 0)
         {
-            CurrentPlayer.AddScore(HitPins.Count);
+            CurrentPlayer.AddScore(_hitPins.Count);
             if (CurrentPlayer.CurrentFrame.FirstThrowScore == 0)
             {
                 popUpLabel.Text = "GUTTER";
@@ -276,7 +360,7 @@ public class GameController : MonoBehaviour
         }
         else if (currentThrow == 1)
         {
-            CurrentPlayer.AddScore(HitPins.Count - CurrentPlayer.CurrentFrame.FirstThrowScore);
+            CurrentPlayer.AddScore(_hitPins.Count - CurrentPlayer.CurrentFrame.FirstThrowScore);
             if (CurrentPlayer.CurrentFrame.SecondThrowScore == 0)
             {
                 popUpLabel.Text = "GUTTER";

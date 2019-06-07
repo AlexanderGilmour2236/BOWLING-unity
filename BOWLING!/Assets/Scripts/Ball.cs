@@ -79,7 +79,7 @@ public class Ball : MonoBehaviour
         _ballPosition = position;
     }
     
-    void Update()
+    void FixedUpdate()
     {    
         if (!_throw)
         {
@@ -91,6 +91,7 @@ public class Ball : MonoBehaviour
         }
 
     }
+
 
     private void OnMouseDown()
     {

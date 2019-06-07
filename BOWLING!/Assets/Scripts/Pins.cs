@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Pins : MonoBehaviour
 {
-    public GameController gameController;
     private List<Pin> _pins;
 
     public float liftSpeed;
@@ -55,7 +54,7 @@ public class Pins : MonoBehaviour
             
             if (Mathf.Abs(_pins[i].transform.rotation.x) >= 0.2 || Mathf.Abs(_pins[i].transform.rotation.z) >= 0.2)
             {
-                gameController.PinHit(_pins[i]);
+                GameController.Instance.PinHit(_pins[i]);
                 _pins[i].transform.parent = null;
                 _pins[i].PinHit = true;
             }
@@ -88,7 +87,7 @@ public class Pins : MonoBehaviour
         foreach (Pin pin in _pins)
         {
             if(!pin.PinHit)
-            gameController.PinHit(pin);
+            GameController.Instance.PinHit(pin);
         }
     }
     
