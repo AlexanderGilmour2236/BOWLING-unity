@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+[System.Serializable]
 public class Player
 {
-    public int ID;
-    public string Name;
+    public int id;
+    public string name;
+    public int pinshit;
+    public int highscore;
+    
     public int CurrentFrameIndex { get; private set; }
     public Frame CurrentFrame => Frames[CurrentFrameIndex];
     /// <summary>
@@ -80,7 +84,7 @@ public class Player
             Frames.Add(new Frame());  
         }
 
-        CurrentFrameIndex = 0;
+        CurrentFrameIndex = 9;
     }
     
     public string ScoreString()

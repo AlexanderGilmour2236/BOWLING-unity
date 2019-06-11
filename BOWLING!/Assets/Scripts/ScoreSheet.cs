@@ -56,7 +56,7 @@ public class ScoreSheet : MonoBehaviour
 
     public void LoadPlayer(Player player)
     {
-        playerNameLabel.text = player.Name;
+        playerNameLabel.text = player.name;
         TotalScoreLabel.text = player.TotalScore.ToString();
         // Вывод очков до 9 фрейма
         for (int i = 0; i < UIFrames.Count-1; i++)

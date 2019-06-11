@@ -8,7 +8,6 @@ public class Menu : MonoBehaviour
 
     public virtual void Show(bool showParameter)
     {
-        Debug.Log("Show");
         gameObject.SetActive(showParameter);
     }
 }

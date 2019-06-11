@@ -15,7 +15,7 @@ public class Pins : MonoBehaviour
     /// поднимает кегли к 0.75 по Y и отключает коллизию и гравитацию
     /// </summary>
     public void LiftUp()
-    {
+    {Debug.Log("LiftUp");
         _liftDown = false;
         _liftUp = true;
         Collide(false);
@@ -24,7 +24,7 @@ public class Pins : MonoBehaviour
     /// опускает кегли к 0 по Y и отключает коллизию и гравитацию
     /// </summary>
     public void LiftDown()
-    {
+    {Debug.Log("LiftDown");
         _liftDown = true;
         _liftUp = false;
     }
@@ -74,11 +74,15 @@ public class Pins : MonoBehaviour
 
     public void Restart()
     {
+        _liftDown = false;
+        _liftUp = false;
+        Collide(true);
+        
         foreach (Pin pin in _pins)
         {
+            pin.PinHit = false;
             pin.Restart();
             pin.transform.parent = transform;
-            pin.PinHit = false;
         }
     }
 

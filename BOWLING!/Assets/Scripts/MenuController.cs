@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
@@ -29,6 +32,19 @@ public class MenuController : MonoBehaviour
     }
 
     #endregion
+
+    #region Events
+
+    public delegate void onGameStart(object sender, ChosePlayersMenuResultArgs a);
+    public static event onGameStart OnGameStart;
+
+    public delegate void onGamePaused(bool showParameter);
+    public static event onGamePaused OnGamePaused;
+
+    public delegate void onMainMenu();
+    public static event onMainMenu OnMainMenu;
+    
+    #endregion
     
     public Menu CurrentMenu { get; private set; }
     [SerializeField] private GameObject backgroundPanel;
@@ -36,12 +52,48 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Menu mainMenu;
     [SerializeField] private PlayerChoseMenu playerChoseMenu;
     [SerializeField] private InputMenu playerCountMenu;
+    [SerializeField] private Button backButton;
+    [SerializeField] private Menu pauseMenu;
+    [SerializeField] private StatisticsMenu statisticsMenu;
+    [SerializeField] private Button pauseButton;
+    private void Start()
+    {
+        playerChoseMenu.OnMenuResult += OnStartGame;
+    }
+
+    private void OnDestroy()
+    {
+        OnGameStart = delegate(object sender, ChosePlayersMenuResultArgs args) {  };
+        OnGamePaused = delegate(bool parameter) {  };
+        OnMainMenu = delegate {  };
+    }
 
     public void MainMenu()
-    {
+    {     
+        if (OnMainMenu != null)
+        {
+            OnMainMenu();
+        }
+
+        CurrentMenu = null;
         NextMenu(mainMenu);
     }
 
+    public void SelectStatisticsMenu()
+    {
+        NextMenu(statisticsMenu);
+    }
+    
+    private void OnStartGame(object sender, ChosePlayersMenuResultArgs a)
+    {
+        pauseButton.gameObject.SetActive(true);
+        HideAllMenues();
+        if (OnGameStart != null)
+        {
+            OnGameStart(sender,a);
+        }
+    }
+    
     public void SelectPlayerCountMenu()
     {
         NextMenu(playerCountMenu);
@@ -54,9 +106,30 @@ public class MenuController : MonoBehaviour
         NextMenu(playerChoseMenu);
     }
 
+    
+    public void PauseMenu(bool showParameter)
+    {
+        if (OnGamePaused != null)
+        {
+            OnGamePaused(showParameter);
+        }
+
+        if (showParameter)
+        {
+            pauseButton.gameObject.SetActive(false);
+            NextMenu(pauseMenu);
+        }
+        else
+        {
+            pauseButton.gameObject.SetActive(true);
+            HideAllMenues();
+        }
+
+    }
+    
     public void NextMenu(Menu menu)
     {
-        backgroundPanel.SetActive(true);
+        gameObject.SetActive(true);
         
         if (CurrentMenu != null)
         {
@@ -65,6 +138,7 @@ public class MenuController : MonoBehaviour
         }
         CurrentMenu = menu;
         CurrentMenu.Show(true);
+        backButton.gameObject.SetActive((CurrentMenu.prevMenu!=null));
     }
     
     public void Back()
@@ -76,15 +150,19 @@ public class MenuController : MonoBehaviour
             CurrentMenu = CurrentMenu.prevMenu;
             
             CurrentMenu.Show(true);
+
+            backButton.gameObject.SetActive((CurrentMenu.prevMenu!=null));
         }
     }
 
+    
     public void HideAllMenues()
     {
-        mainMenu.gameObject.SetActive(false);
-        playerChoseMenu.gameObject.SetActive(false);
-        playerCountMenu.gameObject.SetActive(false);
-        
-        backgroundPanel.SetActive(false);
+        if (CurrentMenu != null)
+        {
+            CurrentMenu.Show(false);
+        }
+        CurrentMenu = null;
+        gameObject.SetActive(false);
     }
 }

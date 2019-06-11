@@ -2,12 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class PlayerChoseMenu : Menu
+public class ChosePlayersMenuResultArgs
 {
+    public List<Player> Players;
+}
+
+public class PlayerChoseMenu : Menu
+{   
+    #region events
+
+    public delegate void onMenuResult(object sender, ChosePlayersMenuResultArgs a);
+    public event onMenuResult OnMenuResult;
+    
+    #endregion
+    
     public int PlayerCount { get; set; }
     public int MaxPlayers;
     private List<InputField> _playerInputs;
-    [SerializeField] private Button OkButton;
+    [SerializeField] private Button okButton;
+    
     private void Start()
     {
         MaxPlayers = transform.childCount - 1;
@@ -25,13 +38,13 @@ public class PlayerChoseMenu : Menu
                 }
             }
         }
-
-        for (int i = 0; i < _playerInputs.Count; i++)
-        {
-            Debug.Log(_playerInputs[i].inputType);
-        }
         
-        OkButton.onClick.AddListener(OnOkButton);
+        okButton.onClick.AddListener(OnOkButton);
+    }
+
+    private void OnDestroy()
+    {
+        OnMenuResult = delegate(object sender, ChosePlayersMenuResultArgs args) {  };
     }
 
     public override void Show(bool showParameter)
@@ -55,13 +68,16 @@ public class PlayerChoseMenu : Menu
         for (int i = 0; i < PlayerCount; i++)
         {
             Player newPlayer = new Player();
-            newPlayer.ID = i;
-            newPlayer.Name = _playerInputs[i].text;
-
+            newPlayer.id = i;
+            newPlayer.name = _playerInputs[i].text;
+            
             players.Add(newPlayer);
         }
-        MenuController.Instance.HideAllMenues();
-        GameController.Instance.GameStart(players);
+
+        if (OnMenuResult != null)
+        {
+            OnMenuResult(this, new ChosePlayersMenuResultArgs{Players = players} );
+        }
     }
     
 }

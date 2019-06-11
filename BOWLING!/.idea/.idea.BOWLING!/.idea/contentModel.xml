@@ -10,6 +10,7 @@
           <e p="Ball.cs" t="Include" />
           <e p="BallHitTrigger.cs" t="Include" />
           <e p="CameraBehaviour.cs" t="Include" />
+          <e p="DBController.cs" t="Include" />
           <e p="fpsCounter.cs" t="Include" />
           <e p="Frame.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
@@ -24,6 +25,7 @@
           <e p="PlayerChoseMenu.cs" t="Include" />
           <e p="PopUpLabel.cs" t="Include" />
           <e p="ScoreSheet.cs" t="Include" />
+          <e p="StatisticsMenu.cs" t="Include" />
         </e>
         <e p="TextMesh Pro" t="Include">
           <e p="Examples &amp; Extras" t="Include">

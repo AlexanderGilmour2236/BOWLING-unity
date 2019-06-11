@@ -5,21 +5,18 @@ using System.ComponentModel;
 using System.Drawing;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
 
 public enum GameMode{
    MainMenu,
    Game,
    Options,
-   HighScores
+   HighScores,
+   GameOver,
+   Pause
 }
-
-public class OnGameStartEventArgs
-{
-    public List<Player> Players;
-}
-
 
 public class GameController : MonoBehaviour
 {
@@ -65,7 +62,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     private bool _ballThrown;
 
-    private Coroutine _endTurn;
+    private Coroutine _endTurnCoroutine;
 
     /// <summary>
     /// true если это конец хода (подсчет очков)
@@ -97,9 +94,13 @@ public class GameController : MonoBehaviour
     /// Всплывающий текст после особых ходов (страйк, спэйр)
     /// </summary>
     [SerializeField] private PopUpLabel popUpLabel;
-    
-    [SerializeField] private Animator pinsCleanerAnimator;
-    [SerializeField] private AnimationClip pinsCleanerAnimationClip;
+
+    [SerializeField] private GameObject pinsCleaner;
+    private Animator _pinsCleanerAnimator;
+    /// <summary>
+    /// Клип для поднятия граблей
+    /// </summary>
+    [SerializeField] private AnimationClip pinsCleanAnimationClip;
 
     public List<Player> Players { get; private set; }
     public int CurrentPlayerIndex { get; private set; }
@@ -107,27 +108,46 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-     
-        Debug.Log("GameController");
+        MenuController.OnGameStart += GameStart;
+        MenuController.OnGamePaused += GamePause;
+        MenuController.OnMainMenu += ToMainMenu;
+        
         _hitPins = new List<Pin>();
-        GameMode = GameMode.MainMenu;
-
-        ToMainMenu();
+        _pinsCleanerAnimator = pinsCleaner.GetComponent<Animator>();
+        
+        menuController.MainMenu();
     }
     
     private void ToMainMenu()
     {
-        menuController.MainMenu();
+        
+        pins.LiftDown();
+        
+        if (GameMode == GameMode.Pause)
+        {
+            GamePause(false);
+            _pinsCleanerAnimator.Play("Clean");
+        }
+        
+        GameMode = GameMode.MainMenu;
+        if (_endTurnCoroutine != null)
+        {
+            StopCoroutine(_endTurnCoroutine);  
+        }
     }
 
-    public void GameStart(List<Player> players)
+    public void GameStart(object sender, ChosePlayersMenuResultArgs a)
     {
-        Debug.Log("Game Start");
-        if (players == null || players.Count < 1)
+        if (a.Players == null || a.Players.Count < 1)
         {
-            Debug.Log("0 Players");
             return;
         }
+        if (_endTurnCoroutine != null)
+        {
+            StopCoroutine(_endTurnCoroutine);  
+        }
+        
+        EndTurn = false;
         _hitPins.Clear();
         
         CurrentPlayerIndex = 0;
@@ -137,9 +157,63 @@ public class GameController : MonoBehaviour
         RestartBall();
         RestartPins();
         
-        Players = players;
+        Players = a.Players;
     }
 
+    private void GameOver()
+    {
+        Player win = new Player();
+        int max = 0;
+        foreach (Player player in Players)
+        {
+            if (player.TotalScore > max)
+            {
+                max = player.TotalScore;
+                win = player;
+            }
+        }
+
+        if (max != 0)
+        {
+            CurrentPlayerIndex = Players.IndexOf(win);
+        }
+
+        foreach (Player player in Players)
+        {
+            player.highscore = player.TotalScore;
+            int totalPinsHit = 0;
+            foreach (Frame frame in player.Frames)
+            {
+                totalPinsHit += frame.Total;
+            }
+            player.pinshit = totalPinsHit;
+        }
+        DBController.Instance.UpdatePlayers(Players);
+        
+        CurrentPlayer.name += " win!";
+        scoreSheet.LoadPlayer(CurrentPlayer);
+        scoreSheet.Show();
+
+        GameMode = GameMode.GameOver;
+    }
+    
+    public void GamePause(bool showParameter)
+    {
+        if (showParameter)
+        {
+            GameMode = GameMode.Pause;
+            Time.timeScale = 0; 
+        }
+        
+        if (!showParameter)
+        {
+            GameMode = GameMode.Game;
+            Time.timeScale = 1;
+        } 
+
+
+    }
+    
     public void Strike()
     {
         pins.Strike();
@@ -294,6 +368,13 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+        else if(GameMode == GameMode.GameOver)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                menuController.MainMenu();
+            }
+        }
        
     }
 
@@ -304,17 +385,17 @@ public class GameController : MonoBehaviour
     /// <param name="pin">Сбитая кегля</param>
     public void PinHit(Pin pin)
     {
-        if (!EndTurn)
+        if (!EndTurn && GameMode == GameMode.Game)
         {
             mainCamera.target = mainCamera.cameraPoints[0].transform;
 
-            pinsCleanerAnimator.Play("SetCleaner");
-            if (_endTurn != null)
+            _pinsCleanerAnimator.Play("SetCleaner");
+            if (_endTurnCoroutine != null)
             {
-                StopCoroutine(_endTurn);
+                StopCoroutine(_endTurnCoroutine);
             }
 
-            _endTurn = StartCoroutine(EndTurnCorutine());
+            _endTurnCoroutine = StartCoroutine(EndTurnCorutine());
             if (pin != null && !_hitPins.Contains(pin))
             {
                 _hitPins.Add(pin);
@@ -394,8 +475,8 @@ public class GameController : MonoBehaviour
         }
 
         // сборщик кеглей
-        pinsCleanerAnimator.Play("Clean");
-        yield return new WaitForSeconds(pinsCleanerAnimationClip.length);
+        _pinsCleanerAnimator.Play("Clean");
+        yield return new WaitForSeconds(pinsCleanAnimationClip.length);
         
         // опускаем кегли и возвращаем шар в начальную позвицию если это первый бросок
         if (!CurrentPlayer.CurrentFrame.IsComplete)
@@ -427,12 +508,15 @@ public class GameController : MonoBehaviour
                 RestartBall();
                 RestartPins();
             }
+            else
+            {
+                GameOver();
+            }
         }
 
         yield return new WaitForSeconds(1);
         
         pins.Collide(true);
-        
         EndTurn = false;
     }
 
