@@ -41,6 +41,8 @@ public class DBController : MonoBehaviour
 
     #endregion
 
+    public string server;
+    
     public void GetStats(string playerName)
     {
         StartCoroutine(getStats(playerName));
@@ -81,7 +83,7 @@ public class DBController : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("action", "update_stats");
         form.AddField("json", json);
-        WWW www = new WWW("https://unitybowling.000webhostapp.com/",form);
+        WWW www = new WWW(server,form);
 
         yield return www;
         if (www.error != null)
@@ -97,7 +99,7 @@ public class DBController : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("action", "get_stats");
         form.AddField("player_name", playerName);
-        WWW www = new WWW("https://unitybowling.000webhostapp.com/",form);
+        WWW www = new WWW(server,form);
 
         yield return www;
         if (www.error != null)

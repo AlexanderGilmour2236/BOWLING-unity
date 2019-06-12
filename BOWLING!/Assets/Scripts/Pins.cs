@@ -15,7 +15,7 @@ public class Pins : MonoBehaviour
     /// поднимает кегли к 0.75 по Y и отключает коллизию и гравитацию
     /// </summary>
     public void LiftUp()
-    {Debug.Log("LiftUp");
+    {
         _liftDown = false;
         _liftUp = true;
         Collide(false);
@@ -24,7 +24,7 @@ public class Pins : MonoBehaviour
     /// опускает кегли к 0 по Y и отключает коллизию и гравитацию
     /// </summary>
     public void LiftDown()
-    {Debug.Log("LiftDown");
+    {
         _liftDown = true;
         _liftUp = false;
     }

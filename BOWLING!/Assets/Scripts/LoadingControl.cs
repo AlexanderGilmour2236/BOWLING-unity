@@ -12,8 +12,6 @@ public class LoadingControl : MonoBehaviour
     {
         _loadingOperation = SceneManager.LoadSceneAsync("MainScene");
     }
-
-    // Update is called once per frame
     void Update()
     {
         filledProgressBar.fillAmount = _loadingOperation.progress;

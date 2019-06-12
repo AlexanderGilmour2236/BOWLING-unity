@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -18,5 +20,15 @@ public class CameraBehaviour : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.Lerp(transform.position, new Vector3(target.localPosition.x- offset.x, target.localPosition.y - offset.y, target.localPosition.z - offset.z), speed*Time.deltaTime);
+
+//        if (cameraPoints.Contains(target.gameObject))
+//        {
+//            transform.localEulerAngles =
+//                Vector3.Lerp(transform.position, target.localEulerAngles, speed/2 * Time.deltaTime);
+//        }
+//        else
+//        {
+//            transform.localEulerAngles = Vector3.forward;
+//        }
     }
 }

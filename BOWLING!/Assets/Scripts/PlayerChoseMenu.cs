@@ -64,17 +64,23 @@ public class PlayerChoseMenu : Menu
     public void OnOkButton()
     {
         List<Player> players = new List<Player>();
-        
+        bool nullField = false;
         for (int i = 0; i < PlayerCount; i++)
         {
+            if (string.IsNullOrWhiteSpace(_playerInputs[i].text))
+            {
+                nullField = true;
+                break;
+            }
+            
             Player newPlayer = new Player();
             newPlayer.id = i;
             newPlayer.name = _playerInputs[i].text;
             
             players.Add(newPlayer);
         }
-
-        if (OnMenuResult != null)
+        
+        if (OnMenuResult != null && !nullField)
         {
             OnMenuResult(this, new ChosePlayersMenuResultArgs{Players = players} );
         }

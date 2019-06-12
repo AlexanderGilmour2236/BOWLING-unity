@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InputMenu : Menu
+public class SliderMenu : Menu
 {
     [SerializeField] private Button okButton;
     [SerializeField] private Slider slider;

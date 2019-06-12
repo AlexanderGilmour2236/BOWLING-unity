@@ -120,9 +120,9 @@ public class GameController : MonoBehaviour
     
     private void ToMainMenu()
     {
-        
         pins.LiftDown();
-        
+        scoreSheet.Hide();
+        mainCamera.target = mainCamera.cameraPoints[0].transform;
         if (GameMode == GameMode.Pause)
         {
             GamePause(false);
@@ -146,7 +146,8 @@ public class GameController : MonoBehaviour
         {
             StopCoroutine(_endTurnCoroutine);  
         }
-        
+
+        _mousePressed = false;
         EndTurn = false;
         _hitPins.Clear();
         

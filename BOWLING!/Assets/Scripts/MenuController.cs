@@ -48,10 +48,9 @@ public class MenuController : MonoBehaviour
     
     public Menu CurrentMenu { get; private set; }
     [SerializeField] private GameObject backgroundPanel;
-    
     [SerializeField] private Menu mainMenu;
     [SerializeField] private PlayerChoseMenu playerChoseMenu;
-    [SerializeField] private InputMenu playerCountMenu;
+    [SerializeField] private SliderMenu playerCountMenu;
     [SerializeField] private Button backButton;
     [SerializeField] private Menu pauseMenu;
     [SerializeField] private StatisticsMenu statisticsMenu;
@@ -74,8 +73,8 @@ public class MenuController : MonoBehaviour
         {
             OnMainMenu();
         }
-
-        CurrentMenu = null;
+        HideAllMenues();
+        
         NextMenu(mainMenu);
     }
 

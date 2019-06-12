@@ -72,6 +72,8 @@ public class Player
     }
     public void Restart()
     {
+        pinshit = 0;
+        highscore = 0;
         TotalScore = 0;
         FrameTotalScore = new int[10];
         for (int i = 0; i < 10; i++)
@@ -84,7 +86,7 @@ public class Player
             Frames.Add(new Frame());  
         }
 
-        CurrentFrameIndex = 9;
+        CurrentFrameIndex = 0;
     }
     
     public string ScoreString()
