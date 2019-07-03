@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -39,10 +40,19 @@ public class DBController : MonoBehaviour
     public delegate void onGetUser(Player player);
     public static event onGetUser OnGetUser;
 
-    #endregion
-
-    public string server;
+    public delegate void onError(Exception ex);
+    public static event onError OnError;
     
+    #endregion
+    
+    public string server;
+
+    private void OnDestroy()
+    {
+        OnError = delegate(Exception ex) {  };
+        OnGetUser = delegate(Player player) {  };
+    }
+
     public void GetStats(string playerName)
     {
         StartCoroutine(getStats(playerName));
@@ -104,7 +114,10 @@ public class DBController : MonoBehaviour
         yield return www;
         if (www.error != null)
         {
-            Debug.Log(www.error.ToString());
+            if (OnError != null)
+            {
+                OnError(new Exception(www.error));
+            }
             yield break;
         }
         try
@@ -115,7 +128,7 @@ public class DBController : MonoBehaviour
                 OnGetUser(p);
             }
         }
-        catch
+        catch(Exception ex)
         {
             if (OnGetUser != null)
             {

@@ -10,7 +10,7 @@ public class Player
     public string name;
     public int pinshit;
     public int highscore;
-    
+    public int strikes;
     public int CurrentFrameIndex { get; private set; }
     public Frame CurrentFrame => Frames[CurrentFrameIndex];
     /// <summary>

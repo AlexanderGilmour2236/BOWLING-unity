@@ -183,11 +183,14 @@ public class GameController : MonoBehaviour
         {
             player.highscore = player.TotalScore;
             int totalPinsHit = 0;
+            int strikes = 0;
             foreach (Frame frame in player.Frames)
             {
+                if (frame.IsStrike) strikes++;
                 totalPinsHit += frame.Total;
             }
             player.pinshit = totalPinsHit;
+            player.strikes = strikes;
         }
         DBController.Instance.UpdatePlayers(Players);
         
@@ -211,8 +214,11 @@ public class GameController : MonoBehaviour
             GameMode = GameMode.Game;
             Time.timeScale = 1;
         } 
+    }
 
-
+    public void ExitGame()
+    {
+        Application.Quit();
     }
     
     public void Strike()
