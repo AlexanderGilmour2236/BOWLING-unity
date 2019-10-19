@@ -24,6 +24,7 @@
           <e p="PlayerChoseMenu.cs" t="Include" />
           <e p="PopUpLabel.cs" t="Include" />
           <e p="ScoreSheet.cs" t="Include" />
+          <e p="ShadowCaster.cs" t="Include" />
           <e p="SliderMenu.cs" t="Include" />
           <e p="StatisticsMenu.cs" t="Include" />
         </e>

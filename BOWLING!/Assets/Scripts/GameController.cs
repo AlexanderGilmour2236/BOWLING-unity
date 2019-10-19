@@ -20,31 +20,6 @@ public enum GameMode{
 
 public class GameController : MonoBehaviour
 {
-    #region Singleton
-
-    private static GameController _instance;
-
-    public static GameController Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject ins = new GameObject("GameController");
-                ins.AddComponent<GameController>();
-            }
-
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        _instance = this;
-    }
-
-    #endregion
-    
     public GameMode GameMode { get; private set; }
     
     [SerializeField]
@@ -111,6 +86,9 @@ public class GameController : MonoBehaviour
         MenuController.OnGameStart += GameStart;
         MenuController.OnGamePaused += GamePause;
         MenuController.OnMainMenu += ToMainMenu;
+
+        pins.Init();
+        pins.OnPinHit += PinHit;
         
         _hitPins = new List<Pin>();
         _pinsCleanerAnimator = pinsCleaner.GetComponent<Animator>();

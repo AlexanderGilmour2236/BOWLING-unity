@@ -5,14 +5,25 @@ using UnityEngine;
 
 public class Pins : MonoBehaviour
 {
+    #region events
+
+    public delegate void onPinHit(Pin pin);
+    public event onPinHit OnPinHit;
+    
+    #endregion
+    
     private List<Pin> _pins;
+    public List<Pin> PinsCollection
+    {
+        get { return _pins; }
+    }
 
     public float liftSpeed;
     
     private bool _liftUp;
     private bool _liftDown;
     /// <summary>
-    /// поднимает кегли к 0.75 по Y и отключает коллизию и гравитацию
+    /// поднимает кегли к liftUpPosition по Y и отключает коллизию и гравитацию
     /// </summary>
     public void LiftUp()
     {
@@ -29,15 +40,11 @@ public class Pins : MonoBehaviour
         _liftUp = false;
     }
     
-    private Vector3 _liftUpPosition;
-    private Vector3 _liftDownPosition;
+    [SerializeField] private Vector3 _liftUpPosition;
+    [SerializeField] private Vector3 _liftDownPosition;
     
-    void Start()
+    public void Init()
     {
-        _liftDownPosition = transform.position;
-        _liftUpPosition = _liftDownPosition;
-        _liftUpPosition.y += 0.75f;
-        
         _pins = new List<Pin>();
         foreach (Transform pin in transform)
         {
@@ -54,7 +61,10 @@ public class Pins : MonoBehaviour
             
             if (Mathf.Abs(_pins[i].transform.rotation.x) >= 0.2 || Mathf.Abs(_pins[i].transform.rotation.z) >= 0.2)
             {
-                GameController.Instance.PinHit(_pins[i]);
+                if (OnPinHit != null)
+                {
+                    OnPinHit(_pins[i]);
+                }
                 _pins[i].transform.parent = null;
                 _pins[i].PinHit = true;
             }
@@ -90,8 +100,8 @@ public class Pins : MonoBehaviour
     {
         foreach (Pin pin in _pins)
         {
-            if(!pin.PinHit)
-            GameController.Instance.PinHit(pin);
+            if(!pin.PinHit && OnPinHit!=null)
+            OnPinHit(pin);
         }
     }
     
