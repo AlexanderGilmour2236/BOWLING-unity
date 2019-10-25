@@ -10,6 +10,7 @@
           <e p="Ball.cs" t="Include" />
           <e p="BallHitTrigger.cs" t="Include" />
           <e p="CameraBehaviour.cs" t="Include" />
+          <e p="CameraPoint.cs" t="Include" />
           <e p="DBController.cs" t="Include" />
           <e p="fpsCounter.cs" t="Include" />
           <e p="Frame.cs" t="Include" />

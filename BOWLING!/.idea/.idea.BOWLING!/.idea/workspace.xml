@@ -2,15 +2,77 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17929bf8-4003-4b6a-ade3-0665533db58d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BOWLING!/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BOWLING!/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BOWLING!/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BOWLING!/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/bs.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/bs.obj.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/pins.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/pins.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon 2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon 3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon 3.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon.psd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Icon/icon.psd.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Materials.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Materials/bs_diff.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Materials/bs_diff.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/Orange_Bowling_Ball.3ds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/Orange_Bowling_Ball.3ds.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/Pin.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/Pin.obj.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/compressed_Pin.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/compressed_Pin.obj.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/disk.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Models/disk.obj.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Bowling-Alley-Floors-Gurus-Floor.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Bowling-Alley-Floors-Gurus-Floor.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/Bowling-Alley-Floors-Gurus-Floor — копия.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/Bowling-Alley-Floors-Gurus-Floor — копия.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/Bowling-Alley-Floors-Gurus-Floor.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/Bowling-Alley-Floors-Gurus-Floor.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/Floor.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/Floor.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/ball_01.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/ball_01.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/banner.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/banner.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/pin.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/pin.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/static_ball_1.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/static_ball_1.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/static_ball_2.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/static_ball_2.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/static_ball_3.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/Materials/static_ball_3.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/bs_diff.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/bs_diff.jpg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/pin-texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/Textures/pin-texture.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/MyriadPro-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/MyriadPro-Bold.ttf.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/loadingProgressBar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/loadingProgressBar.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/loadingProgressBarFull.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/loadingProgressBarFull.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/loadingScreen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/loadingScreen.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/scoreTable2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/scoreTable2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/tableHat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/tableHat.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/tableRow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/tableRow.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/title.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/UI/title.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/alley.physicMaterial" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/alley.physicMaterial.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/ball.physicMaterial" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Graphics/ball.physicMaterial.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,8 +85,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/PinsDownTrigger.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+            <state relative-caret-position="272">
+              <caret line="19" selection-start-line="19" selection-end-line="19" />
               <folding>
                 <marker date="1571218307255" expanded="false" signature="6:78" ph="..." />
                 <marker date="1571218307255" expanded="true" signature="124:423" ph="{...}" />
@@ -37,14 +99,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Assets/Scripts/ShadowCaster.cs">
+        <entry file="file://$PROJECT_DIR$/Assets/Scripts/CameraPoint.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32">
-              <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+            <state relative-caret-position="96">
+              <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
               <folding>
-                <marker date="1571472201697" expanded="false" signature="6:78" ph="..." />
-                <marker date="1571472201697" expanded="true" signature="141:225" ph="{...}" />
-                <marker date="1571472201697" expanded="true" signature="161:223" ph="{...}" />
+                <marker date="1572010900093" expanded="false" signature="6:78" ph="..." />
+                <marker date="1572010900093" expanded="true" signature="120:190" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -340,6 +401,7 @@
     <setting file="file://G:/Загрузки/Telegram Desktop/AnimatorHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerChoseMenu.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/CameraPoint.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.textmeshpro@2.0.0/Tests/Editor/Unity.TextMeshPro.Editor.Tests.asmdef" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -375,6 +437,7 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/GameController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Pins.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/ShadowCaster.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/CameraPoint.cs" />
       </list>
     </option>
   </component>
@@ -389,6 +452,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AssemblyExplorer" />
       <pane id="UnityExplorer">
         <subPane>
           <expand>
@@ -411,11 +475,10 @@
         <option name="show-hidden-items" value="false" />
         <option name="show-project-names" value="true" />
       </pane>
+      <pane id="FileSystemExplorer" />
       <pane id="SolutionExplorer">
         <option name="show-all-files" value="false" />
       </pane>
-      <pane id="FileSystemExplorer" />
-      <pane id="AssemblyExplorer" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -499,12 +562,15 @@
       <workItem from="1560782626712" duration="4002000" />
       <workItem from="1560973683559" duration="1095000" />
       <workItem from="1571343806525" duration="581000" />
-      <workItem from="1571471509369" duration="1262000" />
+      <workItem from="1571471509369" duration="1870000" />
+      <workItem from="1571947606817" duration="599000" />
+      <workItem from="1572003866424" duration="597000" />
+      <workItem from="1572005785847" duration="732000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="296711000" />
+    <option name="totallyTimeSpent" value="299247000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -517,9 +583,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18336888" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18976545" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -927,10 +992,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/ShadowCaster.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="5" column="33" lean-forward="true" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
+          <folding>
+            <marker date="1571472201697" expanded="false" signature="6:78" ph="..." />
+            <marker date="1571472201697" expanded="true" signature="141:225" ph="{...}" />
+            <marker date="1571472201697" expanded="true" signature="161:223" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/PinsDownTrigger.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+        <state relative-caret-position="272">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
           <folding>
             <marker date="1571218307255" expanded="false" signature="6:78" ph="..." />
             <marker date="1571218307255" expanded="true" signature="124:423" ph="{...}" />
@@ -1171,14 +1248,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/ShadowCaster.cs">
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/CameraPoint.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        <state relative-caret-position="96">
+          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
           <folding>
-            <marker date="1571472201697" expanded="false" signature="6:78" ph="..." />
-            <marker date="1571472201697" expanded="true" signature="141:225" ph="{...}" />
-            <marker date="1571472201697" expanded="true" signature="161:223" ph="{...}" />
+            <marker date="1572010900093" expanded="false" signature="6:78" ph="..." />
+            <marker date="1572010900093" expanded="true" signature="120:190" ph="{...}" />
           </folding>
         </state>
       </provider>
