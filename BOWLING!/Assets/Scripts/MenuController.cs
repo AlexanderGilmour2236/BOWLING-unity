@@ -8,31 +8,6 @@ using UnityEngine.UI;
 public class MenuController : MonoBehaviour
 {
     
-    #region Singleton
-
-    private static MenuController _instance;
-
-    public static MenuController Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject ins = new GameObject("MenuController");
-                ins.AddComponent<MenuController>();
-            }
-
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        _instance = this;
-    }
-
-    #endregion
-
     #region Events
 
     public delegate void onGameStart(object sender, ChosePlayersMenuResultArgs a);
@@ -43,21 +18,31 @@ public class MenuController : MonoBehaviour
 
     public delegate void onMainMenu();
     public static event onMainMenu OnMainMenu;
+
+    public delegate void onCameraChanged(Transform cameraPosition);
+    public static event onCameraChanged OnCameraChanged;
     
     #endregion
     
     public Menu CurrentMenu { get; private set; }
+    
     [SerializeField] private GameObject backgroundPanel;
+    
     [SerializeField] private Menu mainMenu;
     [SerializeField] private PlayerChoseMenu playerChoseMenu;
     [SerializeField] private SliderMenu playerCountMenu;
-    [SerializeField] private Button backButton;
     [SerializeField] private Menu pauseMenu;
     [SerializeField] private StatisticsMenu statisticsMenu;
+    [SerializeField] private CustomizeMenu customizeMenu;
+    
+    [SerializeField] private Button backButton;
     [SerializeField] private Button pauseButton;
+    
     private void Start()
     {
         playerChoseMenu.OnMenuResult += OnStartGame;
+        
+        playerCountMenu.OnOkButtonClick.AddListener(() => SelectPlayerNamesMenu(Convert.ToInt32((playerCountMenu.SliderValue))));
     }
 
     private void OnDestroy()
@@ -125,6 +110,11 @@ public class MenuController : MonoBehaviour
         }
 
     }
+
+    public void SelectCustomizeBallMenu()
+    {
+        NextMenu(customizeMenu);
+    }
     
     public void NextMenu(Menu menu)
     {
@@ -137,6 +127,12 @@ public class MenuController : MonoBehaviour
         }
         CurrentMenu = menu;
         CurrentMenu.Show(true);
+
+        if (CurrentMenu.cameraPosition != null)
+        {
+            
+        }
+        
         backButton.gameObject.SetActive((CurrentMenu.prevMenu!=null));
     }
     
@@ -163,5 +159,11 @@ public class MenuController : MonoBehaviour
         }
         CurrentMenu = null;
         gameObject.SetActive(false);
+    }
+
+    public void HideButtons()
+    {
+        backButton.gameObject.SetActive(false);
+        pauseButton.gameObject.SetActive(false);
     }
 }

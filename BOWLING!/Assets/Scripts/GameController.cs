@@ -177,6 +177,8 @@ public class GameController : MonoBehaviour
         scoreSheet.Show();
 
         GameMode = GameMode.GameOver;
+
+        menuController.HideButtons();
     }
     
     public void GamePause(bool showParameter)
